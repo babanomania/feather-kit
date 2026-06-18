@@ -19,6 +19,7 @@ export function Nav({ active, extra }) {
         </a>
         <div className="nav-links">
           <a href="#/components" className={active === "components" ? "active" : ""}>Components</a>
+          <a href="#/patterns" className={active === "patterns" ? "active" : ""}>Patterns</a>
           <a href="#/templates" className={active === "templates" ? "active" : ""}>Templates</a>
           <a href="#/customizer" className={active === "customizer" ? "active" : ""}>Customize</a>
           {extra}
@@ -43,6 +44,7 @@ export function Footer() {
               <span>Project</span>
               <a href={REPO} target="_blank" rel="noreferrer">GitHub</a>
               <a href="https://www.npmjs.com/package/feather-ui-kit" target="_blank" rel="noreferrer">npm</a>
+              <a href="#/patterns">Patterns</a>
               <a href="#/templates">Templates</a>
               <a href="#/customizer">Customize</a>
             </div>
