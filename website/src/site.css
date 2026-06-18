@@ -173,7 +173,7 @@ footer.site { border-top: 1px solid var(--line); padding: 50px 0 60px; }
 /* ───────── customizer ───────── */
 .cz { padding: 38px 0 80px; }
 .cz-head { margin-bottom: 24px; }
-.cz-head .hero-h { max-width: none; }
+.cz-head .hero-h { max-width: 22ch; text-wrap: balance; }
 .cz-head .lede { max-width: 70ch; }
 .cz-layout { display: grid; grid-template-columns: 360px 1fr; gap: 28px; align-items: start; }
 @media (max-width: 940px) { .cz-layout { grid-template-columns: 1fr; } }
