@@ -1,0 +1,1 @@
+import{jsx as e}from"react/jsx-runtime";function s({className:l,children:t,...c}){let o=["feather-select",l].filter(Boolean).join(" ");return e("div",{className:o,children:e("select",{...c,children:t})})}export{s as default};

@@ -1,0 +1,26 @@
+name: Publish feather-kit to npm
+
+# Publishes packages/feather-kit when a version tag is pushed (e.g. feather-kit@0.1.0
+# or v0.1.0). Requires an NPM_TOKEN secret with publish access.
+on:
+  push:
+    tags:
+      - "feather-kit@*"
+      - "v*"
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          registry-url: "https://registry.npmjs.org"
+      - run: npm ci
+      - run: npm -w feather-ui-kit run build
+      - run: npm -w feather-ui-kit publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

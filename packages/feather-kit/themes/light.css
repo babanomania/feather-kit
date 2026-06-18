@@ -1,0 +1,3 @@
+/* feather-kit — base palette. Always import this (it pulls in the token
+   contract). Pair with dark.css if you want a dark-mode override. */
+@import url("./variables.css");

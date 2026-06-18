@@ -1,0 +1,24 @@
+/* feather-kit — the --fk-* design-token contract.
+   These are the Feather (default, light) values. Override any of them on
+   :root, or scope them to a container, to retheme every component at once. */
+:root {
+  --fk-accent:      #109488;
+  --fk-accent-deep: #0C746B;
+  --fk-accent-soft: rgba(16, 148, 136, 0.12);
+  --fk-ink:         #1A1917;
+  --fk-ink-soft:    #57544E;
+  --fk-muted:       #8C8980;
+  --fk-bg:          #FBFAF7;
+  --fk-bg-subtle:   #F2F0EA;
+  --fk-border:      #D8D3C8;
+  --fk-radius:      8px;
+  --fk-danger:      #C5365E;
+
+  /* contrast colour painted over --fk-accent (button text, check marks).
+     Set to a dark value in themes whose accent is light. */
+  --fk-on-accent:   #FFFFFF;
+
+  --fk-font:        system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --fk-font-serif:  Georgia, "Iowan Old Style", "Times New Roman", serif;
+  --fk-font-mono:   ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+}

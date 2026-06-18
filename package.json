@@ -1,0 +1,18 @@
+{
+  "name": "feather-kit-monorepo",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Monorepo for the feather-kit React component library and its marketing website.",
+  "workspaces": [
+    "packages/feather-kit",
+    "website"
+  ],
+  "scripts": {
+    "build:lib": "npm -w feather-ui-kit run build",
+    "build:site": "npm -w website run build",
+    "build": "npm run build:lib && npm run build:site",
+    "dev": "npm -w website run dev",
+    "preview": "npm -w website run preview"
+  },
+  "license": "MIT"
+}

@@ -1,0 +1,1 @@
+import{jsx as d,jsxs as l}from"react/jsx-runtime";function f({variant:a="soft",dot:e,className:s,children:t,...n}){let o=["feather-badge",`feather-badge-${a}`,s].filter(Boolean).join(" ");return l("span",{className:o,...n,children:[e&&d("span",{className:"feather-badge-dot"}),t]})}export{f as default};

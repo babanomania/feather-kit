@@ -1,0 +1,32 @@
+/* feather-kit — dark palette override.
+   Opt-in with <html data-theme="dark">, or let it follow the OS via the
+   prefers-color-scheme block below (unless the user forced light). */
+[data-theme="dark"] {
+  --fk-accent:      #38BDF8;
+  --fk-accent-deep: #0EA5E9;
+  --fk-accent-soft: rgba(56, 189, 248, 0.16);
+  --fk-ink:         #E7ECF3;
+  --fk-ink-soft:    #9AA6B6;
+  --fk-muted:       #6B7686;
+  --fk-bg:          #16181D;
+  --fk-bg-subtle:   #0E0F13;
+  --fk-border:      #2A2E37;
+  --fk-danger:      #FB7185;
+  --fk-on-accent:   #06243A;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --fk-accent:      #38BDF8;
+    --fk-accent-deep: #0EA5E9;
+    --fk-accent-soft: rgba(56, 189, 248, 0.16);
+    --fk-ink:         #E7ECF3;
+    --fk-ink-soft:    #9AA6B6;
+    --fk-muted:       #6B7686;
+    --fk-bg:          #16181D;
+    --fk-bg-subtle:   #0E0F13;
+    --fk-border:      #2A2E37;
+    --fk-danger:      #FB7185;
+    --fk-on-accent:   #06243A;
+  }
+}

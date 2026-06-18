@@ -1,0 +1,185 @@
+/* feather-kit — component styles. Import once:  import "feather-kit/styles.css"
+   Every rule reads from the --fk-* token contract (see themes/variables.css),
+   so a theme swap restyles all of it. */
+
+/* ── typography ── */
+.feather-overline { font-family: var(--fk-font-mono); font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fk-accent-deep); }
+.feather-h1 { font-family: var(--fk-font); font-size: 30px; font-weight: 720; letter-spacing: -0.025em; line-height: 1.1; color: var(--fk-ink); margin: 0; }
+.feather-h2 { font-family: var(--fk-font); font-size: 22px; font-weight: 680; letter-spacing: -0.02em; line-height: 1.18; color: var(--fk-ink); margin: 0; }
+.feather-h3, .feather-title { font-family: var(--fk-font); font-size: 15px; font-weight: 650; letter-spacing: -0.01em; color: var(--fk-ink); margin: 0; }
+.feather-lead { font-family: var(--fk-font-serif); font-size: 17px; line-height: 1.5; color: var(--fk-ink-soft); margin: 0; }
+.feather-text { font-family: var(--fk-font); font-size: 14px; line-height: 1.55; color: var(--fk-ink-soft); margin: 0; }
+.feather-muted { font-family: var(--fk-font); font-size: 12.5px; color: var(--fk-muted); }
+.feather-metric { font-family: var(--fk-font); font-size: 30px; font-weight: 720; letter-spacing: -0.03em; color: var(--fk-ink); font-variant-numeric: tabular-nums; display: inline-flex; align-items: baseline; gap: 6px; line-height: 1; }
+.feather-metric-sm { font-size: 22px; }
+.feather-metric-unit { font-family: var(--fk-font); font-size: 12px; font-weight: 500; letter-spacing: 0; color: var(--fk-muted); }
+
+/* ── button ── */
+.feather-button { font-family: var(--fk-font); font-size: 13.5px; font-weight: 500; height: 36px; padding: 0 15px; border-radius: var(--fk-radius); border: 1px solid transparent; cursor: pointer; white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; gap: 7px; transition: background 130ms, border-color 130ms, transform 90ms; }
+.feather-button:active { transform: translateY(0.5px); }
+.feather-button:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--fk-bg), 0 0 0 4px var(--fk-accent); }
+.feather-button[disabled] { opacity: 0.55; cursor: not-allowed; }
+.feather-button-primary { background: var(--fk-accent); color: var(--fk-on-accent); }
+.feather-button-primary:hover { background: var(--fk-accent-deep); }
+.feather-button-secondary { background: var(--fk-bg-subtle); color: var(--fk-ink); border-color: var(--fk-border); }
+.feather-button-secondary:hover { background: color-mix(in srgb, var(--fk-bg-subtle), var(--fk-ink) 7%); }
+.feather-button-outline { background: var(--fk-bg); color: var(--fk-ink); border-color: var(--fk-border); }
+.feather-button-outline:hover { background: var(--fk-bg-subtle); }
+.feather-button-ghost { background: transparent; color: var(--fk-ink); }
+.feather-button-ghost:hover { background: var(--fk-bg-subtle); }
+.feather-button-destructive { background: var(--fk-danger); color: #fff; }
+.feather-button-destructive:hover { background: color-mix(in srgb, var(--fk-danger), #000 14%); }
+.feather-button-sm { height: 30px; padding: 0 11px; font-size: 12.5px; }
+.feather-button-block { width: 100%; }
+.feather-button svg { width: 15px; height: 15px; }
+
+/* ── field / input ── */
+.feather-field { display: flex; flex-direction: column; gap: 6px; width: 100%; }
+.feather-label { font-family: var(--fk-font); font-size: 12.5px; font-weight: 500; color: var(--fk-ink); }
+.feather-input { font-family: var(--fk-font); font-size: 13.5px; height: 36px; padding: 0 12px; width: 100%; border-radius: var(--fk-radius); border: 1px solid var(--fk-border); background: var(--fk-bg); color: var(--fk-ink); transition: border-color 130ms, box-shadow 130ms; }
+.feather-input::placeholder { color: var(--fk-muted); }
+.feather-input:focus { outline: none; border-color: var(--fk-accent); box-shadow: 0 0 0 3px var(--fk-accent-soft); }
+.feather-hint { font-family: var(--fk-font); font-size: 11.5px; color: var(--fk-muted); }
+
+/* ── select ── */
+.feather-select { position: relative; display: flex; align-items: center; width: 100%; }
+.feather-select select { appearance: none; -webkit-appearance: none; font-family: var(--fk-font); font-size: 13.5px; height: 36px; padding: 0 34px 0 12px; border-radius: var(--fk-radius); border: 1px solid var(--fk-border); background: var(--fk-bg); color: var(--fk-ink); width: 100%; cursor: pointer; transition: border-color 130ms, box-shadow 130ms; }
+.feather-select select:focus { outline: none; border-color: var(--fk-accent); box-shadow: 0 0 0 3px var(--fk-accent-soft); }
+.feather-select::after { content: ""; position: absolute; right: 14px; width: 7px; height: 7px; border-right: 1.5px solid var(--fk-muted); border-bottom: 1.5px solid var(--fk-muted); transform: rotate(45deg) translateY(-2px); pointer-events: none; }
+
+/* ── checkbox / radio ── */
+.feather-check { display: inline-flex; align-items: center; gap: 9px; font-family: var(--fk-font); font-size: 13.5px; color: var(--fk-ink); cursor: pointer; }
+.feather-check input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.feather-check-box { width: 18px; height: 18px; border-radius: max(3px, calc(var(--fk-radius) - 3px)); border: 1.5px solid var(--fk-border); background: var(--fk-bg); display: inline-flex; align-items: center; justify-content: center; flex: none; transition: background 120ms, border-color 120ms; }
+.feather-check.feather-radio .feather-check-box { border-radius: 50%; }
+.feather-check-box svg { width: 12px; height: 12px; color: var(--fk-on-accent); opacity: 0; transition: opacity 120ms; }
+.feather-check-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--fk-on-accent); opacity: 0; transition: opacity 120ms; }
+.feather-check input:checked + .feather-check-box { background: var(--fk-accent); border-color: var(--fk-accent); }
+.feather-check input:checked + .feather-check-box svg, .feather-check input:checked + .feather-check-box .feather-check-dot { opacity: 1; }
+.feather-check input:focus-visible + .feather-check-box { box-shadow: 0 0 0 3px var(--fk-accent-soft); }
+
+/* ── switch ── */
+.feather-switch { display: inline-flex; align-items: center; gap: 9px; font-family: var(--fk-font); font-size: 13.5px; color: var(--fk-ink); cursor: pointer; }
+.feather-switch input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.feather-switch-track { width: 38px; height: 22px; border-radius: 999px; background: var(--fk-border); position: relative; transition: background 160ms; flex: none; }
+.feather-switch-track::after { content: ""; position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.25); transition: transform 170ms cubic-bezier(0.16,1,0.3,1); }
+.feather-switch input:checked + .feather-switch-track { background: var(--fk-accent); }
+.feather-switch input:checked + .feather-switch-track::after { transform: translateX(16px); }
+.feather-switch input:focus-visible + .feather-switch-track { box-shadow: 0 0 0 3px var(--fk-accent-soft); }
+.feather-switch-row { display: flex; width: 100%; justify-content: space-between; align-items: center; gap: 12px; }
+.feather-switch-row .feather-switch-text { display: flex; flex-direction: column; text-align: left; }
+.feather-switch-text b { font-size: 13.5px; font-weight: 600; color: var(--fk-ink); }
+.feather-switch-text span { font-size: 12px; color: var(--fk-muted); font-weight: 400; }
+
+/* ── slider ── */
+.feather-slider { display: flex; align-items: center; gap: 12px; font-family: var(--fk-font); font-size: 12.5px; color: var(--fk-ink-soft); width: 100%; }
+.feather-slider input[type=range] { accent-color: var(--fk-accent); flex: 1; }
+.feather-slider-value { font-variant-numeric: tabular-nums; color: var(--fk-ink); min-width: 30px; text-align: right; }
+
+/* ── badge ── */
+.feather-badge { font-family: var(--fk-font); font-size: 11px; font-weight: 600; padding: 2.5px 9px; border-radius: 999px; display: inline-flex; align-items: center; gap: 5px; line-height: 1.4; }
+.feather-badge-solid { background: var(--fk-ink); color: var(--fk-bg); }
+.feather-badge-soft { background: var(--fk-accent-soft); color: var(--fk-accent-deep); }
+.feather-badge-outline { border: 1px solid var(--fk-border); color: var(--fk-ink-soft); }
+.feather-badge-danger { background: color-mix(in srgb, var(--fk-danger), transparent 88%); color: var(--fk-danger); }
+.feather-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+/* ── avatar ── */
+.feather-avatar { width: 34px; height: 34px; border-radius: 50%; font-family: var(--fk-font); font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; color: var(--fk-on-accent); background: linear-gradient(135deg, var(--fk-accent), color-mix(in srgb, var(--fk-accent), #fff 28%)); flex: none; overflow: hidden; }
+.feather-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.feather-avatars { display: flex; }
+.feather-avatars .feather-avatar { margin-left: -8px; border: 2px solid var(--fk-bg); }
+.feather-avatars .feather-avatar:first-child { margin-left: 0; }
+.feather-avatar-more { background: var(--fk-bg-subtle); color: var(--fk-ink-soft); }
+
+/* ── progress ── */
+.feather-progress { height: 8px; border-radius: 999px; background: var(--fk-bg-subtle); overflow: hidden; width: 100%; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--fk-border), transparent 45%); }
+.feather-progress > i { display: block; height: 100%; background: var(--fk-accent); border-radius: 999px; transition: width 240ms cubic-bezier(0.16,1,0.3,1); }
+
+/* ── card ── */
+.feather-card { background: var(--fk-bg); border: 1px solid var(--fk-border); border-radius: calc(var(--fk-radius) + 6px); box-shadow: 0 1px 2px rgba(0,0,0,0.04); overflow: hidden; }
+.feather-card-head { padding: 18px 20px; }
+.feather-card-title { font-family: var(--fk-font); font-size: 16px; font-weight: 650; color: var(--fk-ink); letter-spacing: -0.01em; margin: 0; }
+.feather-card-desc { font-family: var(--fk-font); font-size: 13px; color: var(--fk-muted); margin: 4px 0 0; line-height: 1.45; }
+.feather-card-body { padding: 18px 20px; }
+.feather-card-foot { padding: 14px 20px; border-top: 1px solid var(--fk-border); display: flex; gap: 9px; justify-content: flex-end; background: var(--fk-bg-subtle); }
+
+/* ── table ── */
+.feather-table-wrap { width: 100%; overflow-x: auto; }
+.feather-table { width: 100%; border-collapse: collapse; font-family: var(--fk-font); font-size: 13px; }
+.feather-table th { text-align: left; font-weight: 600; color: var(--fk-muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; padding: 10px 14px; border-bottom: 1px solid var(--fk-border); white-space: nowrap; }
+.feather-table td { padding: 12px 14px; border-bottom: 1px solid var(--fk-border); color: var(--fk-ink); white-space: nowrap; vertical-align: middle; }
+.feather-table tbody tr:last-child td { border-bottom: 0; }
+.feather-table tbody tr { transition: background 100ms; }
+.feather-table tbody tr:hover { background: color-mix(in srgb, var(--fk-bg), var(--fk-ink) 4%); }
+.feather-table .feather-num { text-align: right; font-variant-numeric: tabular-nums; }
+
+/* ── tabs (zero JS — radio group + CSS sibling) ── */
+.feather-tabs { width: 100%; }
+.feather-tabs > input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.feather-tabs > label { font-family: var(--fk-font); font-size: 13px; font-weight: 500; padding: 7px 13px 9px; cursor: pointer; color: var(--fk-muted); display: inline-block; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color 120ms; }
+.feather-tabs > label:hover { color: var(--fk-ink); }
+.feather-tabs > input:checked + label { color: var(--fk-ink); border-bottom-color: var(--fk-accent); }
+.feather-tabs > input:focus-visible + label { outline: 2px solid var(--fk-accent); outline-offset: 2px; border-radius: 5px; }
+.feather-tabs-panels { border-top: 1px solid var(--fk-border); padding-top: 14px; }
+.feather-tabs-panel { display: none; font-family: var(--fk-font); font-size: 13.5px; color: var(--fk-ink-soft); line-height: 1.55; }
+.feather-tabs > input:nth-of-type(1):checked ~ .feather-tabs-panels > .feather-tabs-panel:nth-of-type(1),
+.feather-tabs > input:nth-of-type(2):checked ~ .feather-tabs-panels > .feather-tabs-panel:nth-of-type(2),
+.feather-tabs > input:nth-of-type(3):checked ~ .feather-tabs-panels > .feather-tabs-panel:nth-of-type(3),
+.feather-tabs > input:nth-of-type(4):checked ~ .feather-tabs-panels > .feather-tabs-panel:nth-of-type(4),
+.feather-tabs > input:nth-of-type(5):checked ~ .feather-tabs-panels > .feather-tabs-panel:nth-of-type(5),
+.feather-tabs > input:nth-of-type(6):checked ~ .feather-tabs-panels > .feather-tabs-panel:nth-of-type(6),
+.feather-tabs > input:nth-of-type(7):checked ~ .feather-tabs-panels > .feather-tabs-panel:nth-of-type(7),
+.feather-tabs > input:nth-of-type(8):checked ~ .feather-tabs-panels > .feather-tabs-panel:nth-of-type(8) { display: block; }
+
+/* ── accordion (native <details>) ── */
+.feather-accordion { border-bottom: 1px solid var(--fk-border); }
+.feather-accordion:first-of-type { border-top: 1px solid var(--fk-border); }
+.feather-accordion > summary { font-family: var(--fk-font); font-size: 13.5px; font-weight: 500; padding: 13px 2px; cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 10px; color: var(--fk-ink); }
+.feather-accordion > summary::-webkit-details-marker { display: none; }
+.feather-accordion > summary::after { content: "+"; color: var(--fk-muted); font-size: 16px; line-height: 1; }
+.feather-accordion[open] > summary::after { content: "\2212"; color: var(--fk-accent); }
+.feather-accordion-body { font-family: var(--fk-font); font-size: 13px; color: var(--fk-ink-soft); line-height: 1.55; padding: 0 2px 14px; }
+
+/* ── tooltip (zero JS — CSS only) ── */
+.feather-tooltip { position: relative; display: inline-flex; }
+.feather-tooltip::after { content: attr(data-tip); position: absolute; bottom: calc(100% + 9px); left: 50%; transform: translateX(-50%) translateY(4px); background: var(--fk-ink); color: var(--fk-bg); font-size: 11.5px; padding: 5px 9px; border-radius: 7px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 130ms, transform 130ms; font-family: var(--fk-font); z-index: 20; }
+.feather-tooltip:hover::after, .feather-tooltip:focus-visible::after { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ── menu (zero JS — Popover API) ── */
+.feather-menu-trigger { font-family: var(--fk-font); font-size: 13px; font-weight: 500; padding: 0 13px; height: 34px; border-radius: var(--fk-radius); border: 1px solid var(--fk-border); background: var(--fk-bg); color: var(--fk-ink); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 6px; transition: border-color 120ms, background 120ms; }
+.feather-menu-trigger:hover { background: var(--fk-bg-subtle); }
+.feather-menu-trigger svg { width: 15px; height: 15px; }
+.feather-menu { border: 1px solid var(--fk-border); border-radius: calc(var(--fk-radius) + 2px); background: var(--fk-bg); padding: 5px; min-width: 172px; box-shadow: 0 1px 2px rgba(0,0,0,0.05), 0 16px 32px -16px rgba(0,0,0,0.42); }
+@supports (top: anchor(bottom)) { .feather-menu { margin: 0; inset: auto; top: calc(anchor(bottom) + 6px); left: anchor(left); } }
+.feather-menu button, .feather-menu a { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; text-align: left; font-family: var(--fk-font); font-size: 13px; padding: 7px 9px; border: 0; background: transparent; border-radius: 6px; color: var(--fk-ink); cursor: pointer; text-decoration: none; }
+.feather-menu button:hover, .feather-menu a:hover { background: var(--fk-bg-subtle); }
+.feather-menu .feather-kbd { font-family: var(--fk-font-mono); font-size: 10.5px; color: var(--fk-muted); }
+.feather-menu .feather-menu-danger { color: var(--fk-danger); }
+.feather-menu .feather-menu-danger:hover { background: color-mix(in srgb, var(--fk-danger), transparent 90%); }
+.feather-menu hr { border: 0; border-top: 1px solid var(--fk-border); margin: 5px 4px; }
+.feather-menu:popover-open { animation: feather-pop 130ms ease; }
+@keyframes feather-pop { from { opacity: 0; transform: translateY(-4px); } }
+
+/* ── dialog (native <dialog>) ── */
+.feather-dialog { border: 1px solid var(--fk-border); border-radius: calc(var(--fk-radius) + 6px); padding: 0; width: min(400px, calc(100vw - 36px)); background: var(--fk-bg); color: var(--fk-ink); box-shadow: 0 1px 2px rgba(0,0,0,0.05), 0 40px 90px -34px rgba(0,0,0,0.5); }
+.feather-dialog::backdrop { background: rgba(10,10,12,0.46); -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px); }
+.feather-dialog[open] { animation: feather-dlg 190ms cubic-bezier(0.16,1,0.3,1); }
+@keyframes feather-dlg { from { opacity: 0; transform: translateY(10px) scale(0.97); } }
+.feather-dialog-body { padding: 20px 22px; }
+.feather-dialog-body h3 { font-family: var(--fk-font); font-size: 16px; font-weight: 650; margin: 0 0 5px; color: var(--fk-ink); }
+.feather-dialog-body p { font-family: var(--fk-font); font-size: 13px; color: var(--fk-muted); margin: 0; line-height: 1.5; }
+.feather-dialog-foot { padding: 14px 20px; border-top: 1px solid var(--fk-border); display: flex; gap: 9px; justify-content: flex-end; background: var(--fk-bg-subtle); }
+
+/* ── toast ── */
+.feather-toaster { position: fixed; right: 18px; bottom: 18px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
+.feather-toast { pointer-events: auto; display: flex; align-items: flex-start; gap: 11px; background: var(--fk-ink); color: var(--fk-bg); padding: 12px 14px 13px; border-radius: calc(var(--fk-radius) + 4px); box-shadow: 0 12px 34px -10px rgba(0,0,0,0.45); width: 270px; animation: feather-toast-in 260ms cubic-bezier(0.16,1,0.3,1); }
+.feather-toast-icon { flex: none; width: 20px; height: 20px; border-radius: 50%; background: var(--fk-accent); color: var(--fk-on-accent); display: inline-flex; align-items: center; justify-content: center; font-size: 12px; margin-top: 1px; }
+.feather-toast-title { font-family: var(--fk-font); font-size: 13px; font-weight: 600; }
+.feather-toast-desc { font-family: var(--fk-font); font-size: 12px; color: color-mix(in srgb, var(--fk-bg), transparent 34%); margin-top: 2px; }
+@keyframes feather-toast-in { from { opacity: 0; transform: translateY(12px) scale(0.98); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .feather-button, .feather-switch-track::after, .feather-progress > i, .feather-menu:popover-open,
+  .feather-dialog[open], .feather-toast { animation: none !important; transition: none !important; }
+}

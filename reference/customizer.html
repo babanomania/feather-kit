@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feather Kit — Theme Customizer</title>
+<meta name="description" content="Tweak the --fk-* CSS variables, preview every Feather Kit component live, pick from 12 ready-made themes, and copy the generated CSS.">
+<style>
+  :root {
+    /* page chrome — stays Feather-teal so the tool is always readable */
+    --paper: #FBFAF7;
+    --paper-2: #F2F0EA;
+    --paper-3: #E9E6DF;
+    --ink: #1A1917;
+    --ink-soft: #57544E;
+    --muted: #8C8980;
+    --line: #E7E3DA;
+    --line-2: #D8D3C8;
+    --accent: #109488;
+    --accent-deep: #0C746B;
+    --accent-soft: rgba(16, 148, 136, 0.12);
+    --danger: #C5365E;
+    --graphite: #1B1A18;
+    --graphite-2: #262522;
+    --graphite-line: #34322F;
+    --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+    --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+    /* the themed contract — live preview reads these; JS overrides them on the root */
+    --fk-accent:      #109488;
+    --fk-accent-deep: #0C746B;
+    --fk-accent-soft: rgba(16, 148, 136, 0.12);
+    --fk-ink:         #1A1917;
+    --fk-ink-soft:    #57544E;
+    --fk-muted:       #8C8980;
+    --fk-bg:          #FBFAF7;
+    --fk-bg-subtle:   #F2F0EA;
+    --fk-border:      #D8D3C8;
+    --fk-radius:      8px;
+    --fk-danger:      #C5365E;
+    --fk-on-accent:   #FFFFFF;   /* preview-only: contrast colour over the accent */
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: var(--sans); line-height: 1.55; -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+  ::selection { background: var(--accent-soft); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+  .wrap { width: 100%; max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+
+  /* ── nav ── */
+  nav { position: sticky; top: 0; z-index: 50; background: rgba(251,250,247,0.85); backdrop-filter: saturate(140%) blur(10px); border-bottom: 1px solid var(--line); }
+  .nav-in { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+  .brand { display: flex; align-items: center; gap: 9px; font-family: var(--mono); font-weight: 600; font-size: 15px; letter-spacing: -0.01em; }
+  .brand svg { width: 20px; height: 20px; color: var(--accent); }
+  .brand span { color: var(--muted); font-weight: 500; }
+  .nav-links { display: flex; align-items: center; gap: 22px; font-family: var(--mono); font-size: 13px; }
+  .nav-links a { color: var(--ink-soft); transition: color 140ms; }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-links a.active { color: var(--accent); }
+  .nav-links .ghub { color: var(--ink); }
+  @media (max-width: 720px) { .nav-links a:not(.ghub):not(.active) { display: none; } }
+
+  /* ── head ── */
+  .cz { padding: 40px 0 80px; }
+  .cz-head { margin-bottom: 26px; max-width: 70ch; }
+  .eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin: 0 0 14px; }
+  .eyebrow b { color: var(--accent); font-weight: 600; }
+  h1 { font-family: var(--mono); font-weight: 700; letter-spacing: -0.03em; line-height: 1.04; font-size: clamp(30px, 5vw, 46px); margin: 0 0 14px; }
+  h1 .n { color: var(--accent); }
+  .lede { font-family: var(--serif); font-size: clamp(16px, 2vw, 19px); color: var(--ink-soft); margin: 0; line-height: 1.5; }
+  .lede code { font-family: var(--mono); font-size: 0.82em; background: var(--paper-2); padding: 1px 6px; border-radius: 5px; color: var(--ink); }
+
+  /* ── layout ── */
+  .cz-layout { display: grid; grid-template-columns: 360px 1fr; gap: 28px; align-items: start; }
+  @media (max-width: 940px) { .cz-layout { grid-template-columns: 1fr; } }
+
+  /* ── control panel ── */
+  .panel { position: sticky; top: 78px; max-height: calc(100vh - 96px); overflow: auto; border: 1px solid var(--line-2); border-radius: 16px; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+  @media (max-width: 940px) { .panel { position: static; max-height: none; } }
+  .grp { padding: 18px 18px; border-bottom: 1px solid var(--line); }
+  .grp:last-child { border-bottom: 0; }
+  .grp-title { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin: 0 0 14px; display: flex; align-items: center; justify-content: space-between; }
+  .grp-title .hint { color: var(--muted); letter-spacing: 0; text-transform: none; font-size: 11px; }
+
+  /* presets */
+  .themes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .swatch { border: 1px solid var(--line-2); border-radius: 11px; padding: 9px 9px 8px; cursor: pointer; text-align: left; display: flex; flex-direction: column; gap: 8px; font-family: var(--mono); transition: transform 110ms, box-shadow 130ms, outline-color 120ms; outline: 2px solid transparent; outline-offset: 1px; }
+  .swatch:hover { transform: translateY(-1px); box-shadow: 0 6px 16px -10px rgba(0,0,0,0.4); }
+  .swatch.active { outline-color: var(--accent); }
+  .swatch .sw-dots { display: flex; gap: 4px; }
+  .swatch .sw-dots i { width: 13px; height: 13px; border-radius: 50%; }
+  .swatch .sw-name { font-size: 10.5px; font-weight: 600; letter-spacing: -0.01em; }
+
+  /* color controls */
+  .ctrl { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 7px 0; }
+  .ctrl + .ctrl { border-top: 1px solid var(--line); }
+  .ctrl-meta { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+  .ctrl-name { font-size: 13px; font-weight: 500; color: var(--ink); }
+  .ctrl-meta code { font-family: var(--mono); font-size: 10.5px; color: var(--muted); }
+  .ctrl-color { display: flex; align-items: center; gap: 7px; flex: none; }
+  input[type=color] { -webkit-appearance: none; appearance: none; width: 30px; height: 30px; border: 1px solid var(--line-2); border-radius: 8px; padding: 0; background: none; cursor: pointer; }
+  input[type=color]::-webkit-color-swatch-wrapper { padding: 2px; }
+  input[type=color]::-webkit-color-swatch { border: none; border-radius: 6px; }
+  input[type=color]::-moz-color-swatch { border: none; border-radius: 6px; }
+  .hex { width: 84px; font-family: var(--mono); font-size: 12px; height: 30px; border: 1px solid var(--line-2); border-radius: 8px; padding: 0 8px; background: #fff; color: var(--ink); text-transform: uppercase; }
+  .hex:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+
+  /* sliders */
+  .slider { padding: 4px 0; }
+  .slider-top { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 6px; }
+  .slider-top .s-name { font-size: 13px; font-weight: 500; color: var(--ink); }
+  .slider-top .s-name code { font-family: var(--mono); font-size: 10.5px; color: var(--muted); font-weight: 400; margin-left: 7px; }
+  .slider-top .s-val { font-family: var(--mono); font-size: 12px; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .slider input[type=range] { width: 100%; accent-color: var(--accent); }
+
+  /* actions */
+  .actions { display: flex; gap: 8px; }
+  .pbtn { font-family: var(--mono); font-size: 12.5px; font-weight: 500; padding: 9px 12px; border-radius: 9px; cursor: pointer; border: 1px solid var(--line-2); background: #fff; color: var(--ink); display: inline-flex; align-items: center; justify-content: center; gap: 7px; transition: background 130ms, border-color 130ms; flex: 1; }
+  .pbtn:hover { background: var(--paper-2); }
+  .pbtn.primary { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .pbtn.primary:hover { background: #000; }
+  .pbtn svg { width: 14px; height: 14px; }
+
+  /* output */
+  .out-bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+  .out-bar .actions { width: auto; flex: none; }
+  .out-bar .pbtn { flex: none; }
+  pre.out-code { font-family: var(--mono); font-size: 12px; line-height: 1.65; color: #D9D5CC; background: var(--graphite); border: 1px solid var(--graphite-line); border-radius: 12px; padding: 16px 16px; overflow-x: auto; margin: 0; white-space: pre; }
+  .out-tip { font-family: var(--mono); font-size: 11px; color: var(--muted); margin: 10px 0 0; line-height: 1.6; }
+  .out-tip code { color: var(--ink-soft); }
+
+  /* ════════════════════════════════════════════
+     PREVIEW STAGE — driven entirely by --fk-* vars
+     ════════════════════════════════════════════ */
+  .stage-wrap { min-width: 0; }
+  .stage-bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+  .stage-bar .sb-title { font-family: var(--mono); font-size: 12.5px; font-weight: 600; color: var(--ink); }
+  .stage-bar .sb-note { font-family: var(--mono); font-size: 11.5px; color: var(--muted); }
+
+  .stage {
+    position: relative; border: 1px solid var(--line-2); border-radius: 18px; overflow: hidden;
+    background: var(--fk-bg-subtle); color: var(--fk-ink);
+    padding: 28px 26px 34px; box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 30px 60px -40px rgba(26,25,23,0.3);
+    transition: background 200ms;
+  }
+  .pv { display: flex; flex-direction: column; gap: 18px; }
+  .pv-row { display: flex; flex-wrap: wrap; gap: 9px; align-items: center; }
+  .pv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
+  @media (max-width: 600px) { .pv-grid { grid-template-columns: 1fr; } }
+  .pv-stack { display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
+
+  /* typography */
+  .ui-overline { font-family: var(--mono); font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fk-accent-deep); }
+  .ui-h1 { font-family: var(--sans); font-size: 30px; font-weight: 720; letter-spacing: -0.025em; line-height: 1.1; color: var(--fk-ink); margin: 0; }
+  .ui-h2 { font-family: var(--sans); font-size: 22px; font-weight: 680; letter-spacing: -0.02em; line-height: 1.18; color: var(--fk-ink); margin: 0; }
+  .ui-h3, .ui-title { font-family: var(--sans); font-size: 15px; font-weight: 650; letter-spacing: -0.01em; color: var(--fk-ink); margin: 0; }
+  .ui-lead { font-family: var(--serif); font-size: 16.5px; line-height: 1.5; color: var(--fk-ink-soft); margin: 0; }
+  .ui-text { font-family: var(--sans); font-size: 13.5px; line-height: 1.55; color: var(--fk-ink-soft); margin: 0; }
+  .ui-text code { font-family: var(--mono); font-size: 0.85em; background: var(--fk-bg-subtle); padding: 1px 5px; border-radius: 5px; color: var(--fk-ink); }
+  .ui-muted { font-family: var(--sans); font-size: 12.5px; color: var(--fk-muted); }
+  .ui-metric { font-family: var(--sans); font-size: 30px; font-weight: 720; letter-spacing: -0.03em; color: var(--fk-ink); font-variant-numeric: tabular-nums; display: inline-flex; align-items: baseline; gap: 6px; line-height: 1; }
+  .ui-metric.sm { font-size: 22px; }
+  .ui-metric .u { font-family: var(--sans); font-size: 12px; font-weight: 500; letter-spacing: 0; color: var(--fk-muted); }
+
+  /* buttons */
+  .ui-btn { font-family: var(--sans); font-size: 13.5px; font-weight: 500; height: 36px; padding: 0 15px; border-radius: var(--fk-radius); border: 1px solid transparent; cursor: pointer; white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; gap: 7px; transition: background 130ms, border-color 130ms, transform 90ms; }
+  .ui-btn:active { transform: translateY(0.5px); }
+  .ui-btn:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--fk-bg), 0 0 0 4px var(--fk-accent); }
+  .ui-btn-primary { background: var(--fk-accent); color: var(--fk-on-accent); }
+  .ui-btn-primary:hover { background: var(--fk-accent-deep); }
+  .ui-btn-secondary { background: var(--fk-bg-subtle); color: var(--fk-ink); border-color: var(--fk-border); }
+  .ui-btn-secondary:hover { background: color-mix(in srgb, var(--fk-bg-subtle), var(--fk-ink) 7%); }
+  .ui-btn-outline { background: var(--fk-bg); color: var(--fk-ink); border-color: var(--fk-border); }
+  .ui-btn-outline:hover { background: var(--fk-bg-subtle); }
+  .ui-btn-ghost { background: transparent; color: var(--fk-ink); }
+  .ui-btn-ghost:hover { background: var(--fk-bg-subtle); }
+  .ui-btn-destructive { background: var(--fk-danger); color: #fff; }
+  .ui-btn-destructive:hover { background: color-mix(in srgb, var(--fk-danger), #000 14%); }
+  .ui-btn-sm { height: 30px; padding: 0 11px; font-size: 12.5px; }
+
+  /* fields */
+  .ui-field { display: flex; flex-direction: column; gap: 6px; width: 100%; }
+  .ui-label { font-family: var(--sans); font-size: 12.5px; font-weight: 500; color: var(--fk-ink); }
+  .ui-input { font-family: var(--sans); font-size: 13.5px; height: 36px; padding: 0 12px; width: 100%; border-radius: var(--fk-radius); border: 1px solid var(--fk-border); background: var(--fk-bg); color: var(--fk-ink); transition: border-color 130ms, box-shadow 130ms; }
+  .ui-input::placeholder { color: var(--fk-muted); }
+  .ui-input:focus { outline: none; border-color: var(--fk-accent); box-shadow: 0 0 0 3px var(--fk-accent-soft); }
+
+  /* select */
+  .ui-select { position: relative; display: flex; align-items: center; width: 100%; }
+  .ui-select select { appearance: none; -webkit-appearance: none; font-family: var(--sans); font-size: 13.5px; height: 36px; padding: 0 34px 0 12px; border-radius: var(--fk-radius); border: 1px solid var(--fk-border); background: var(--fk-bg); color: var(--fk-ink); width: 100%; cursor: pointer; transition: border-color 130ms, box-shadow 130ms; }
+  .ui-select select:focus { outline: none; border-color: var(--fk-accent); box-shadow: 0 0 0 3px var(--fk-accent-soft); }
+  .ui-select::after { content: ""; position: absolute; right: 14px; width: 7px; height: 7px; border-right: 1.5px solid var(--fk-muted); border-bottom: 1.5px solid var(--fk-muted); transform: rotate(45deg) translateY(-2px); pointer-events: none; }
+
+  /* checkbox + radio */
+  .ui-check { display: inline-flex; align-items: center; gap: 9px; font-family: var(--sans); font-size: 13.5px; color: var(--fk-ink); cursor: pointer; }
+  .ui-check input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .ui-check .box { width: 18px; height: 18px; border-radius: max(3px, calc(var(--fk-radius) - 3px)); border: 1.5px solid var(--fk-border); background: var(--fk-bg); display: inline-flex; align-items: center; justify-content: center; flex: none; transition: background 120ms, border-color 120ms; }
+  .ui-check.radio .box { border-radius: 50%; }
+  .ui-check .box svg { width: 12px; height: 12px; color: var(--fk-on-accent); opacity: 0; transition: opacity 120ms; }
+  .ui-check .box .rd { width: 8px; height: 8px; border-radius: 50%; background: var(--fk-on-accent); opacity: 0; transition: opacity 120ms; }
+  .ui-check input:checked + .box { background: var(--fk-accent); border-color: var(--fk-accent); }
+  .ui-check input:checked + .box svg, .ui-check input:checked + .box .rd { opacity: 1; }
+  .ui-check input:focus-visible + .box { box-shadow: 0 0 0 3px var(--fk-accent-soft); }
+
+  /* switch */
+  .ui-switch { display: inline-flex; align-items: center; gap: 9px; font-family: var(--sans); font-size: 13.5px; color: var(--fk-ink); cursor: pointer; }
+  .ui-switch input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .ui-track { width: 38px; height: 22px; border-radius: 999px; background: var(--fk-border); position: relative; transition: background 160ms; flex: none; }
+  .ui-track::after { content: ""; position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.25); transition: transform 170ms cubic-bezier(0.16,1,0.3,1); }
+  .ui-switch input:checked + .ui-track { background: var(--fk-accent); }
+  .ui-switch input:checked + .ui-track::after { transform: translateX(16px); }
+  .ui-switch input:focus-visible + .ui-track { box-shadow: 0 0 0 3px var(--fk-accent-soft); }
+  .ui-switch.sw-row { display: flex; width: 100%; justify-content: space-between; align-items: center; gap: 12px; }
+  .sw-text { display: flex; flex-direction: column; text-align: left; }
+  .sw-text b { font-size: 13.5px; font-weight: 600; color: var(--fk-ink); }
+  .sw-text span { font-size: 12px; color: var(--fk-muted); font-weight: 400; }
+
+  /* slider */
+  .ui-range { display: flex; align-items: center; gap: 12px; font-family: var(--sans); font-size: 12.5px; color: var(--fk-ink-soft); width: 100%; }
+  .ui-range input[type=range] { accent-color: var(--fk-accent); flex: 1; }
+  .ui-range .val { font-variant-numeric: tabular-nums; color: var(--fk-ink); min-width: 28px; text-align: right; }
+
+  /* badge */
+  .ui-badge { font-family: var(--sans); font-size: 11px; font-weight: 600; padding: 2.5px 9px; border-radius: 999px; display: inline-flex; align-items: center; gap: 5px; line-height: 1.4; }
+  .ui-badge-solid { background: var(--fk-ink); color: var(--fk-bg); }
+  .ui-badge-soft { background: var(--fk-accent-soft); color: var(--fk-accent-deep); }
+  .ui-badge-outline { border: 1px solid var(--fk-border); color: var(--fk-ink-soft); }
+  .ui-badge .bdot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+  /* avatar */
+  .ui-avatar { width: 34px; height: 34px; border-radius: 50%; font-family: var(--sans); font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; color: var(--fk-on-accent); background: linear-gradient(135deg, var(--fk-accent), color-mix(in srgb, var(--fk-accent), #fff 28%)); }
+  .ui-avatars { display: flex; }
+  .ui-avatars .ui-avatar { margin-left: -8px; border: 2px solid var(--fk-bg); }
+  .ui-avatars .ui-avatar:first-child { margin-left: 0; }
+  .ui-avatar.a2 { background: linear-gradient(135deg,#6D4AE0,#9a7cf0); color: #fff; }
+  .ui-avatar.a3 { background: linear-gradient(135deg,#2F5FD0,#6f93e8); color: #fff; }
+  .ui-avatar.more { background: var(--fk-bg-subtle); color: var(--fk-ink-soft); }
+
+  /* card */
+  .ui-card { background: var(--fk-bg); border: 1px solid var(--fk-border); border-radius: calc(var(--fk-radius) + 6px); box-shadow: 0 1px 2px rgba(0,0,0,0.04); overflow: hidden; width: 100%; }
+  .ui-card-head { padding: 18px 20px 0; }
+  .ui-card-title { font-family: var(--sans); font-size: 16px; font-weight: 650; color: var(--fk-ink); letter-spacing: -0.01em; margin: 0; }
+  .ui-card-desc { font-family: var(--sans); font-size: 13px; color: var(--fk-muted); margin: 4px 0 0; line-height: 1.45; }
+  .ui-card-body { padding: 18px 20px; }
+  .ui-card-foot { padding: 14px 20px; border-top: 1px solid var(--fk-border); display: flex; gap: 9px; justify-content: flex-end; background: var(--fk-bg-subtle); }
+  .ch-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+
+  /* table */
+  .ui-table-wrap { width: 100%; overflow-x: auto; }
+  .ui-table { width: 100%; border-collapse: collapse; font-family: var(--sans); font-size: 13px; }
+  .ui-table th { text-align: left; font-weight: 600; color: var(--fk-muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; padding: 9px 14px; border-bottom: 1px solid var(--fk-border); white-space: nowrap; }
+  .ui-table td { padding: 11px 14px; border-bottom: 1px solid var(--fk-border); color: var(--fk-ink); white-space: nowrap; }
+  .ui-table tbody tr:last-child td { border-bottom: 0; }
+  .ui-table tbody tr { transition: background 100ms; }
+  .ui-table tbody tr:hover { background: color-mix(in srgb, var(--fk-bg), var(--fk-ink) 4%); }
+  .ui-table .num { text-align: right; font-variant-numeric: tabular-nums; }
+
+  /* tabs — CSS only */
+  .ui-tabs { width: 100%; }
+  .ui-tabs input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+  .ui-tabs label { font-family: var(--sans); font-size: 13px; font-weight: 500; padding: 7px 13px 9px; cursor: pointer; color: var(--fk-muted); display: inline-block; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color 120ms; }
+  .ui-tabs label:hover { color: var(--fk-ink); }
+  .ui-tabs > input:checked + label { color: var(--fk-ink); border-bottom-color: var(--fk-accent); }
+  .ui-tabs > input:focus-visible + label { outline: 2px solid var(--fk-accent); outline-offset: 2px; border-radius: 5px; }
+  .ui-panels { border-top: 1px solid var(--fk-border); padding-top: 13px; }
+  .ui-panel { display: none; font-family: var(--sans); font-size: 13.5px; color: var(--fk-ink-soft); line-height: 1.55; }
+  #pvtab1:checked ~ .ui-panels .p1, #pvtab2:checked ~ .ui-panels .p2, #pvtab3:checked ~ .ui-panels .p3 { display: block; }
+
+  /* accordion */
+  .ui-acc { border-bottom: 1px solid var(--fk-border); width: 100%; }
+  .ui-acc:first-of-type { border-top: 1px solid var(--fk-border); }
+  .ui-acc summary { font-family: var(--sans); font-size: 13.5px; font-weight: 500; padding: 11px 2px; cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 10px; color: var(--fk-ink); }
+  .ui-acc summary::-webkit-details-marker { display: none; }
+  .ui-acc summary::after { content: "+"; color: var(--fk-muted); font-size: 16px; line-height: 1; }
+  .ui-acc[open] summary::after { content: "\2212"; color: var(--fk-accent); }
+  .ui-acc-body { font-family: var(--sans); font-size: 13px; color: var(--fk-ink-soft); line-height: 1.55; padding: 0 2px 12px; }
+
+  /* tooltip — CSS only */
+  .ui-tip { position: relative; cursor: default; font-family: var(--sans); font-size: 13.5px; color: var(--fk-ink); border-bottom: 1px dashed var(--fk-border); }
+  .ui-tip::after { content: attr(data-tip); position: absolute; bottom: calc(100% + 9px); left: 50%; transform: translateX(-50%) translateY(4px); background: var(--fk-ink); color: var(--fk-bg); font-size: 11.5px; padding: 5px 9px; border-radius: 7px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 130ms, transform 130ms; }
+  .ui-tip::before { content: ""; position: absolute; bottom: calc(100% + 4px); left: 50%; transform: translateX(-50%) translateY(4px); border: 5px solid transparent; border-top-color: var(--fk-ink); opacity: 0; transition: opacity 130ms, transform 130ms; }
+  .ui-tip:hover::after, .ui-tip:focus-visible::after, .ui-tip:hover::before, .ui-tip:focus-visible::before { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* progress */
+  .ui-progress { height: 8px; border-radius: 999px; background: var(--fk-bg-subtle); overflow: hidden; width: 100%; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--fk-border), transparent 40%); }
+  .ui-progress > i { display: block; height: 100%; background: var(--fk-accent); border-radius: 999px; }
+
+  /* menu — Popover API */
+  .ui-trigger { font-family: var(--sans); font-size: 13px; font-weight: 500; padding: 0 13px; height: 34px; border-radius: var(--fk-radius); border: 1px solid var(--fk-border); background: var(--fk-bg); color: var(--fk-ink); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; anchor-name: --czmenu; transition: border-color 120ms, background 120ms; }
+  .ui-trigger:hover { background: var(--fk-bg-subtle); }
+  .ui-trigger svg { width: 14px; height: 14px; }
+  .ui-menu { border: 1px solid var(--fk-border); border-radius: calc(var(--fk-radius) + 2px); background: var(--fk-bg); padding: 5px; min-width: 176px; box-shadow: 0 1px 2px rgba(0,0,0,0.05), 0 16px 32px -16px rgba(0,0,0,0.4); position-anchor: --czmenu; }
+  @supports (top: anchor(bottom)) { .ui-menu { margin: 0; inset: auto; top: calc(anchor(bottom) + 6px); left: anchor(left); } }
+  .ui-menu button { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; text-align: left; font-family: var(--sans); font-size: 13px; padding: 7px 9px; border: 0; background: transparent; border-radius: 6px; color: var(--fk-ink); cursor: pointer; }
+  .ui-menu button:hover { background: var(--fk-bg-subtle); }
+  .ui-menu button .kbd { font-family: var(--mono); font-size: 10.5px; color: var(--fk-muted); }
+  .ui-menu button.danger { color: var(--fk-danger); }
+  .ui-menu button.danger:hover { background: color-mix(in srgb, var(--fk-danger), transparent 90%); }
+  .ui-menu hr { border: 0; border-top: 1px solid var(--fk-border); margin: 5px 4px; }
+  .ui-menu:popover-open { animation: pop-in 140ms ease; }
+  @keyframes pop-in { from { opacity: 0; transform: translateY(-4px); } }
+
+  /* dialog */
+  dialog.ui-dialog { border: 1px solid var(--fk-border); border-radius: calc(var(--fk-radius) + 6px); padding: 0; width: min(380px, calc(100vw - 36px)); background: var(--fk-bg); color: var(--fk-ink); box-shadow: 0 1px 2px rgba(0,0,0,0.05), 0 40px 90px -34px rgba(0,0,0,0.5); }
+  dialog.ui-dialog::backdrop { background: rgba(10,10,12,0.46); -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px); }
+  dialog.ui-dialog[open] { animation: dlg-pop 190ms cubic-bezier(0.16,1,0.3,1); }
+  @keyframes dlg-pop { from { opacity: 0; transform: translateY(10px) scale(0.97); } }
+
+  /* toast */
+  .ui-toast { display: flex; align-items: flex-start; gap: 11px; background: var(--fk-ink); color: var(--fk-bg); padding: 12px 14px 13px; border-radius: calc(var(--fk-radius) + 4px); box-shadow: 0 12px 34px -10px rgba(0,0,0,0.45); width: 268px; }
+  .ui-toast .t-icon { flex: none; width: 20px; height: 20px; border-radius: 50%; background: var(--fk-accent); color: var(--fk-on-accent); display: inline-flex; align-items: center; justify-content: center; font-size: 12px; margin-top: 1px; }
+  .ui-toast .t-title { font-family: var(--sans); font-size: 13px; font-weight: 600; }
+  .ui-toast .t-desc { font-family: var(--sans); font-size: 12px; color: color-mix(in srgb, var(--fk-bg), transparent 34%); margin-top: 2px; }
+  .pv-toast { position: absolute; right: 22px; bottom: 20px; z-index: 3; animation: toast-in 260ms cubic-bezier(0.16,1,0.3,1); }
+  .pv-toast[hidden] { display: none; }
+  @keyframes toast-in { from { opacity: 0; transform: translateY(12px) scale(0.98); } }
+
+  /* footer */
+  footer { border-top: 1px solid var(--line); padding: 34px 0 44px; }
+  .foot-in { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; font-family: var(--mono); font-size: 12.5px; color: var(--muted); }
+  .foot-in a { color: var(--ink-soft); }
+  .foot-in a:hover { color: var(--accent); }
+
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+  @media (max-width: 720px) { .wrap { padding: 0 18px; } .stage { padding: 22px 16px 28px; } .pv-toast { right: 12px; bottom: 12px; } .ui-toast { width: 232px; } }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="wrap nav-in">
+    <a class="brand" href="./index.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"></path><line x1="16" y1="8" x2="2" y2="22"></line><line x1="17.5" y1="15" x2="9" y2="15"></line></svg>
+      <b>Feather</b><span>Kit</span>
+    </a>
+    <div class="nav-links">
+      <a href="./index.html#components">Components</a>
+      <a href="./index.html#install">Install</a>
+      <a class="active" href="./customizer.html">Themes</a>
+      <a class="ghub" href="https://github.com/babanomania/feather-kit" target="_blank" rel="noopener">GitHub ↗</a>
+    </div>
+  </div>
+</nav>
+
+<main class="cz">
+  <div class="wrap">
+    <div class="cz-head">
+      <p class="eyebrow"><b>·</b> Theme customizer</p>
+      <h1>Make it <span class="n">yours</span> in a few clicks.</h1>
+      <p class="lede">Every component styles through a single set of <code>--fk-*</code> custom properties. Tweak them below — or start from one of twelve ready-made themes — watch the live preview update, then copy the generated CSS into your own stylesheet.</p>
+    </div>
+
+    <div class="cz-layout">
+
+      <!-- ── CONTROLS ── -->
+      <aside class="panel">
+
+        <div class="grp">
+          <p class="grp-title">Presets <span class="hint">12 themes</span></p>
+          <div class="themes" id="themes"></div>
+        </div>
+
+        <div class="grp">
+          <p class="grp-title">Accent</p>
+          <div class="ctrl">
+            <div class="ctrl-meta"><span class="ctrl-name">Accent</span><code>--fk-accent</code></div>
+            <div class="ctrl-color"><input type="color" data-k="accent"><input type="text" class="hex" data-k="accent" maxlength="7" spellcheck="false"></div>
+          </div>
+          <div class="ctrl">
+            <div class="ctrl-meta"><span class="ctrl-name">Accent deep</span><code>--fk-accent-deep</code></div>
+            <div class="ctrl-color"><input type="color" data-k="accentDeep"><input type="text" class="hex" data-k="accentDeep" maxlength="7" spellcheck="false"></div>
+          </div>
+          <div class="slider" style="margin-top:6px;">
+            <div class="slider-top"><span class="s-name">Accent soft <code>--fk-accent-soft</code></span><span class="s-val" id="softVal">0.12</span></div>
+            <input type="range" id="softRange" min="0" max="0.3" step="0.01" value="0.12">
+          </div>
+        </div>
+
+        <div class="grp">
+          <p class="grp-title">Text</p>
+          <div class="ctrl">
+            <div class="ctrl-meta"><span class="ctrl-name">Ink</span><code>--fk-ink</code></div>
+            <div class="ctrl-color"><input type="color" data-k="ink"><input type="text" class="hex" data-k="ink" maxlength="7" spellcheck="false"></div>
+          </div>
+          <div class="ctrl">
+            <div class="ctrl-meta"><span class="ctrl-name">Ink soft</span><code>--fk-ink-soft</code></div>
+            <div class="ctrl-color"><input type="color" data-k="inkSoft"><input type="text" class="hex" data-k="inkSoft" maxlength="7" spellcheck="false"></div>
+          </div>
+          <div class="ctrl">
+            <div class="ctrl-meta"><span class="ctrl-name">Muted</span><code>--fk-muted</code></div>
+            <div class="ctrl-color"><input type="color" data-k="muted"><input type="text" class="hex" data-k="muted" maxlength="7" spellcheck="false"></div>
+          </div>
+        </div>
+
+        <div class="grp">
+          <p class="grp-title">Surfaces</p>
+          <div class="ctrl">
+            <div class="ctrl-meta"><span class="ctrl-name">Background</span><code>--fk-bg</code></div>
+            <div class="ctrl-color"><input type="color" data-k="bg"><input type="text" class="hex" data-k="bg" maxlength="7" spellcheck="false"></div>
+          </div>
+          <div class="ctrl">
+            <div class="ctrl-meta"><span class="ctrl-name">Subtle</span><code>--fk-bg-subtle</code></div>
+            <div class="ctrl-color"><input type="color" data-k="bgSubtle"><input type="text" class="hex" data-k="bgSubtle" maxlength="7" spellcheck="false"></div>
+          </div>
+          <div class="ctrl">
+            <div class="ctrl-meta"><span class="ctrl-name">Border</span><code>--fk-border</code></div>
+            <div class="ctrl-color"><input type="color" data-k="border"><input type="text" class="hex" data-k="border" maxlength="7" spellcheck="false"></div>
+          </div>
+          <div class="ctrl">
+            <div class="ctrl-meta"><span class="ctrl-name">Danger</span><code>--fk-danger</code></div>
+            <div class="ctrl-color"><input type="color" data-k="danger"><input type="text" class="hex" data-k="danger" maxlength="7" spellcheck="false"></div>
+          </div>
+        </div>
+
+        <div class="grp">
+          <p class="grp-title">Shape</p>
+          <div class="slider">
+            <div class="slider-top"><span class="s-name">Radius <code>--fk-radius</code></span><span class="s-val" id="radiusVal">8px</span></div>
+            <input type="range" id="radiusRange" min="0" max="20" step="1" value="8">
+          </div>
+        </div>
+
+        <div class="grp">
+          <div class="actions">
+            <button class="pbtn" id="resetBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"></path><path d="M3 3v5h5"></path></svg>
+              Reset
+            </button>
+            <button class="pbtn" id="randomBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"></path></svg>
+              Surprise me
+            </button>
+          </div>
+        </div>
+
+        <div class="grp">
+          <div class="out-bar">
+            <p class="grp-title" style="margin:0;">Generated CSS</p>
+            <div class="actions">
+              <button class="pbtn" id="copyBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                <span id="copyLabel">Copy</span>
+              </button>
+              <button class="pbtn primary" id="downloadBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                .css
+              </button>
+            </div>
+          </div>
+          <pre class="out-code" id="out"></pre>
+          <p class="out-tip">Drop this <code>:root</code> block into your global stylesheet, <em>after</em> <code>import "feather-kit/themes/light.css"</code>, to override the defaults.</p>
+        </div>
+
+      </aside>
+
+      <!-- ── PREVIEW ── -->
+      <div class="stage-wrap">
+        <div class="stage-bar">
+          <span class="sb-title">Live preview</span>
+          <span class="sb-note">reflects your <code style="font-family:var(--mono)">--fk-*</code> variables</span>
+        </div>
+
+        <div class="stage" id="stage">
+          <div class="pv">
+
+            <div style="display:flex;flex-direction:column;gap:7px;align-items:flex-start;width:100%;">
+              <span class="ui-overline">Analytics overview</span>
+              <h2 class="ui-h2">Type that carries the theme.</h2>
+              <p class="ui-text" style="max-width:48ch;">Headings, titles, labels and metrics all read from the same <code>--fk-*</code> tokens — restyle once, everything follows.</p>
+              <div style="display:flex;gap:26px;align-items:flex-end;margin-top:4px;flex-wrap:wrap;">
+                <div class="ui-metric">$48,210<span class="u">MRR</span></div>
+                <div class="ui-metric sm">3,942<span class="u">users</span></div>
+                <span class="ui-muted">Updated 2h ago</span>
+              </div>
+            </div>
+
+            <div class="pv-row">
+              <button class="ui-btn ui-btn-primary">Primary</button>
+              <button class="ui-btn ui-btn-secondary">Secondary</button>
+              <button class="ui-btn ui-btn-outline">Outline</button>
+              <button class="ui-btn ui-btn-ghost">Ghost</button>
+              <button class="ui-btn ui-btn-destructive">Delete</button>
+              <button class="ui-btn ui-btn-primary ui-btn-sm">Small</button>
+            </div>
+
+            <div class="pv-grid">
+              <!-- card -->
+              <div class="ui-card">
+                <div class="ui-card-head">
+                  <div class="ch-row">
+                    <div>
+                      <h3 class="ui-card-title">Create project</h3>
+                      <p class="ui-card-desc">Deploy your new project in one click.</p>
+                    </div>
+                    <span class="ui-badge ui-badge-soft"><span class="bdot"></span>Pro</span>
+                  </div>
+                </div>
+                <div class="ui-card-body" style="display:flex;flex-direction:column;gap:14px;">
+                  <div class="ui-field">
+                    <label class="ui-label">Project name</label>
+                    <input class="ui-input" value="feather-kit" spellcheck="false">
+                  </div>
+                  <div class="ui-field">
+                    <label class="ui-label">Framework</label>
+                    <div class="ui-select"><select><option>React</option><option>Preact</option><option>Solid</option></select></div>
+                  </div>
+                  <label class="ui-switch sw-row">
+                    <span class="sw-text"><b>Private repository</b><span>Only invited members can see it.</span></span>
+                    <span style="display:inline-flex"><input type="checkbox" checked><span class="ui-track"></span></span>
+                  </label>
+                </div>
+                <div class="ui-card-foot">
+                  <button class="ui-btn ui-btn-ghost">Cancel</button>
+                  <button class="ui-btn ui-btn-primary" id="pv-deploy">Deploy →</button>
+                </div>
+              </div>
+
+              <!-- right stack -->
+              <div class="pv-stack">
+                <div class="pv-row">
+                  <span class="ui-badge ui-badge-solid">New</span>
+                  <span class="ui-badge ui-badge-soft">Beta</span>
+                  <span class="ui-badge ui-badge-outline">Draft</span>
+                  <span class="ui-badge ui-badge-soft"><span class="bdot"></span>Live</span>
+                </div>
+                <div class="ui-avatars">
+                  <span class="ui-avatar">AK</span>
+                  <span class="ui-avatar a2">RS</span>
+                  <span class="ui-avatar a3">MT</span>
+                  <span class="ui-avatar more">+5</span>
+                </div>
+                <label class="ui-check"><input type="checkbox" checked><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Accept terms</label>
+                <label class="ui-check radio"><input type="radio" name="pvr" checked><span class="box"><span class="rd"></span></span>Monthly billing</label>
+                <label class="ui-switch"><input type="checkbox" checked><span class="ui-track"></span>Notifications</label>
+                <label class="ui-range" style="width:100%"><span>Volume</span><input type="range" min="0" max="100" value="68" id="pv-range" aria-label="Volume"><span class="val" id="pv-rangeval">68</span></label>
+                <div style="width:100%;display:flex;flex-direction:column;gap:7px;">
+                  <div style="display:flex;justify-content:space-between;font-family:var(--sans);font-size:12px;color:var(--fk-ink-soft);"><span>Uploading</span><span>68%</span></div>
+                  <div class="ui-progress"><i style="width:68%"></i></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- tabs -->
+            <div class="ui-tabs">
+              <input type="radio" name="pvtab" id="pvtab1" checked><label for="pvtab1">Account</label>
+              <input type="radio" name="pvtab" id="pvtab2"><label for="pvtab2">Password</label>
+              <input type="radio" name="pvtab" id="pvtab3"><label for="pvtab3">Team</label>
+              <div class="ui-panels">
+                <div class="ui-panel p1">Tabs are three radio inputs and a CSS sibling selector — zero JavaScript, and they still carry the theme.</div>
+                <div class="ui-panel p2">The browser's radio group remembers which tab is active.</div>
+                <div class="ui-panel p3">Invite teammates and manage their roles here.</div>
+              </div>
+            </div>
+
+            <!-- table -->
+            <div class="ui-card">
+              <div class="ui-table-wrap">
+                <table class="ui-table">
+                  <thead><tr><th>Component</th><th>Built on</th><th class="num">Size</th></tr></thead>
+                  <tbody>
+                    <tr><td>Dialog</td><td>&lt;dialog&gt;</td><td class="num">≈ 300 B</td></tr>
+                    <tr><td>Accordion</td><td>&lt;details&gt;</td><td class="num">≈ 140 B</td></tr>
+                    <tr><td>Tabs</td><td>radio + CSS</td><td class="num">≈ 220 B</td></tr>
+                    <tr><td>Button</td><td>just CSS</td><td class="num">≈ 90 B</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- accordion + overlays -->
+            <div class="pv-grid">
+              <div class="pv-stack" style="width:100%;">
+                <details class="ui-acc" open><summary>Is it accessible?</summary><div class="ui-acc-body">Yes — it's a native &lt;details&gt;, so keyboard and screen-reader behavior come built in.</div></details>
+                <details class="ui-acc"><summary>Does it need JavaScript?</summary><div class="ui-acc-body">No. The browser toggles it on its own.</div></details>
+              </div>
+              <div class="pv-stack" style="gap:14px;">
+                <span class="ui-tip" tabindex="0" data-tip="Copied to clipboard ✓">Hover or focus me</span>
+                <button class="ui-trigger" popovertarget="czmenu">
+                  Actions
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </button>
+                <div class="ui-menu" popover id="czmenu">
+                  <button>Duplicate <span class="kbd">⌘D</span></button>
+                  <button>Rename <span class="kbd">⌘R</span></button>
+                  <button>Move to…</button>
+                  <hr>
+                  <button class="danger">Delete <span class="kbd">⌫</span></button>
+                </div>
+                <button class="ui-btn ui-btn-outline" id="pv-open-dialog">Open dialog</button>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="ui-toast pv-toast" id="pv-toast" hidden>
+            <span class="t-icon">✓</span>
+            <div><div class="t-title">Deployed to production</div><div class="t-desc">feather-kit is live in ~12s.</div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<!-- the dialog the preview opens -->
+<dialog class="ui-dialog" id="czdlg" aria-labelledby="czdlg-title">
+  <div class="ui-card-head" style="padding:20px 22px 0;">
+    <div class="ch-row">
+      <div>
+        <h3 class="ui-card-title" id="czdlg-title">Delete project?</h3>
+        <p class="ui-card-desc">This permanently removes feather-kit and all its deployments.</p>
+      </div>
+    </div>
+  </div>
+  <div class="ui-card-body" style="padding-top:14px;">
+    <span class="ui-badge ui-badge-outline">This can't be undone</span>
+  </div>
+  <form method="dialog" class="ui-card-foot">
+    <button class="ui-btn ui-btn-ghost" value="cancel">Cancel</button>
+    <button class="ui-btn ui-btn-destructive" value="ok">Delete</button>
+  </form>
+</dialog>
+
+<footer>
+  <div class="wrap foot-in">
+    <span>Feather Kit — theme customizer. Ships no fonts, no frameworks.</span>
+    <span><a href="./index.html">← Back to overview</a> &nbsp;·&nbsp; <a href="https://github.com/babanomania/feather-kit" target="_blank" rel="noopener">GitHub</a></span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  // ── the twelve presets: every value of the --fk-* contract, plus a soft alpha ──
+  var THEMES = [
+    { name:"Feather",  accent:"#109488", accentDeep:"#0C746B", ink:"#1A1917", inkSoft:"#57544E", muted:"#8C8980", bg:"#FBFAF7", bgSubtle:"#F2F0EA", border:"#D8D3C8", danger:"#C5365E", radius:8,  softAlpha:0.12 },
+    { name:"Slate",    accent:"#2563EB", accentDeep:"#1D4ED8", ink:"#0F172A", inkSoft:"#475569", muted:"#94A3B8", bg:"#FFFFFF", bgSubtle:"#F1F5F9", border:"#E2E8F0", danger:"#E11D48", radius:4,  softAlpha:0.12 },
+    { name:"Indigo",   accent:"#4F46E5", accentDeep:"#4338CA", ink:"#1E1B4B", inkSoft:"#4B4763", muted:"#9490AC", bg:"#FFFFFF", bgSubtle:"#F5F3FF", border:"#E5E1F6", danger:"#E11D48", radius:10, softAlpha:0.12 },
+    { name:"Violet",   accent:"#7C3AED", accentDeep:"#6D28D9", ink:"#2A1857", inkSoft:"#574B70", muted:"#9B90B2", bg:"#FFFFFF", bgSubtle:"#F7F3FE", border:"#EBE3F9", danger:"#E11D48", radius:16, softAlpha:0.12 },
+    { name:"Rose",     accent:"#E11D48", accentDeep:"#BE123C", ink:"#1F1416", inkSoft:"#5C474C", muted:"#9B8488", bg:"#FFFBFB", bgSubtle:"#FFF1F2", border:"#F5DCE0", danger:"#B42318", radius:12, softAlpha:0.10 },
+    { name:"Honey",    accent:"#D97706", accentDeep:"#B45309", ink:"#1C1917", inkSoft:"#57534E", muted:"#A8A29E", bg:"#FFFDF7", bgSubtle:"#FBF4E6", border:"#ECE2CE", danger:"#DC2626", radius:10, softAlpha:0.12 },
+    { name:"Emerald",  accent:"#059669", accentDeep:"#047857", ink:"#14201B", inkSoft:"#4B5A52", muted:"#93A39B", bg:"#FFFFFF", bgSubtle:"#F0F7F3", border:"#DCEAE2", danger:"#E11D48", radius:6,  softAlpha:0.12 },
+    { name:"Graphite", accent:"#18181B", accentDeep:"#000000", ink:"#18181B", inkSoft:"#52525B", muted:"#A1A1AA", bg:"#FFFFFF", bgSubtle:"#F4F4F5", border:"#E4E4E7", danger:"#DC2626", radius:2,  softAlpha:0.08 },
+    { name:"Midnight", accent:"#38BDF8", accentDeep:"#0EA5E9", ink:"#E2E8F0", inkSoft:"#94A3B8", muted:"#64748B", bg:"#131C31", bgSubtle:"#0B1120", border:"#29354F", danger:"#FB7185", radius:10, softAlpha:0.16 },
+    { name:"Mocha",    accent:"#F59E0B", accentDeep:"#D97706", ink:"#F4ECE0", inkSoft:"#C4B5A2", muted:"#8C8072", bg:"#292420", bgSubtle:"#1B1714", border:"#3B342C", danger:"#F87171", radius:18, softAlpha:0.16 },
+    { name:"Forest",   accent:"#34D399", accentDeep:"#10B981", ink:"#E6F2EC", inkSoft:"#A7C4B5", muted:"#6E8F7E", bg:"#12241B", bgSubtle:"#0B1711", border:"#21392C", danger:"#FB7185", radius:7,  softAlpha:0.15 },
+    { name:"Nord",     accent:"#88C0D0", accentDeep:"#5E81AC", ink:"#ECEFF4", inkSoft:"#C2CAD8", muted:"#7E8AA0", bg:"#3B4252", bgSubtle:"#2E3440", border:"#4A5266", danger:"#BF616A", radius:3,  softAlpha:0.16 }
+  ];
+
+  // contract keys → CSS variable names (accent-soft, radius, on-accent are derived)
+  var VARS = {
+    accent:"--fk-accent", accentDeep:"--fk-accent-deep", ink:"--fk-ink", inkSoft:"--fk-ink-soft",
+    muted:"--fk-muted", bg:"--fk-bg", bgSubtle:"--fk-bg-subtle", border:"--fk-border", danger:"--fk-danger"
+  };
+
+  var root = document.documentElement;
+  var S = {}; // current state
+
+  // ── colour helpers ──
+  function parseHex(h){ h=h.replace("#",""); if(h.length===3){h=h[0]+h[0]+h[1]+h[1]+h[2]+h[2];} var n=parseInt(h,16); return {r:(n>>16)&255,g:(n>>8)&255,b:n&255}; }
+  function toHex(c){ function p(n){ return ("0"+Math.max(0,Math.min(255,Math.round(n))).toString(16)).slice(-2); } return ("#"+p(c.r)+p(c.g)+p(c.b)).toUpperCase(); }
+  function rgba(hex,a){ var c=parseHex(hex); return "rgba("+c.r+", "+c.g+", "+c.b+", "+a+")"; }
+  function darken(hex,t){ var c=parseHex(hex); return toHex({r:c.r*(1-t),g:c.g*(1-t),b:c.b*(1-t)}); }
+  function lum(hex){ var c=parseHex(hex); function f(v){ v/=255; return v<=0.03928?v/12.92:Math.pow((v+0.055)/1.055,2.4); } return 0.2126*f(c.r)+0.7152*f(c.g)+0.0722*f(c.b); }
+  function onAccent(hex){ return lum(hex) > 0.55 ? "#15161A" : "#FFFFFF"; }
+  function isHex(v){ return /^#?[0-9a-fA-F]{6}$/.test(v); }
+  function norm(v){ return ("#"+v.replace("#","")).toUpperCase(); }
+  function hslToHex(h,s,l){
+    s/=100; l/=100;
+    var k=function(n){ return (n + h/30) % 12; };
+    var a=s*Math.min(l,1-l);
+    var f=function(n){ return l - a*Math.max(-1, Math.min(k(n)-3, Math.min(9-k(n),1))); };
+    return toHex({ r:f(0)*255, g:f(8)*255, b:f(4)*255 });
+  }
+
+  // ── render the whole state into the page ──
+  function apply(){
+    var k;
+    for (k in VARS){ root.style.setProperty(VARS[k], S[k]); }
+    root.style.setProperty("--fk-accent-soft", rgba(S.accent, S.softAlpha));
+    root.style.setProperty("--fk-radius", S.radius + "px");
+    root.style.setProperty("--fk-on-accent", onAccent(S.accent));
+
+    // sync controls
+    document.querySelectorAll("input[type=color][data-k]").forEach(function(el){ el.value = S[el.dataset.k]; });
+    document.querySelectorAll(".hex[data-k]").forEach(function(el){ if (document.activeElement !== el) el.value = S[el.dataset.k]; });
+    softRange.value = S.softAlpha; softVal.textContent = Number(S.softAlpha).toFixed(2);
+    radiusRange.value = S.radius; radiusVal.textContent = S.radius + "px";
+
+    out.textContent = genCSS();
+  }
+
+  function genCSS(){
+    var rows = [
+      ["--fk-accent",      S.accent],
+      ["--fk-accent-deep", S.accentDeep],
+      ["--fk-accent-soft", rgba(S.accent, S.softAlpha)],
+      ["--fk-ink",         S.ink],
+      ["--fk-ink-soft",    S.inkSoft],
+      ["--fk-muted",       S.muted],
+      ["--fk-bg",          S.bg],
+      ["--fk-bg-subtle",   S.bgSubtle],
+      ["--fk-border",      S.border],
+      ["--fk-radius",      S.radius + "px"],
+      ["--fk-danger",      S.danger]
+    ];
+    var pad = 18;
+    var body = rows.map(function(r){
+      var key = r[0] + ":";
+      while (key.length < pad) key += " ";
+      return "  " + key + r[1] + ";";
+    }).join("\n");
+    return ":root {\n" + body + "\n}\n";
+  }
+
+  function setTheme(i){
+    var t = THEMES[i];
+    S = { accent:t.accent, accentDeep:t.accentDeep, ink:t.ink, inkSoft:t.inkSoft, muted:t.muted,
+          bg:t.bg, bgSubtle:t.bgSubtle, border:t.border, danger:t.danger, radius:t.radius, softAlpha:t.softAlpha };
+    markActive(i);
+    apply();
+  }
+
+  function markActive(i){
+    document.querySelectorAll(".swatch").forEach(function(el){
+      el.classList.toggle("active", String(i) === el.dataset.i);
+    });
+  }
+
+  // ── build the preset swatches ──
+  var themesEl = document.getElementById("themes");
+  themesEl.innerHTML = THEMES.map(function(t,i){
+    return '<button class="swatch" data-i="'+i+'" title="'+t.name+'" style="background:'+t.bg+';border-color:'+t.border+';color:'+t.ink+'">'+
+      '<span class="sw-dots">'+
+        '<i style="background:'+t.accent+'"></i>'+
+        '<i style="background:'+t.ink+'"></i>'+
+        '<i style="background:'+t.bgSubtle+';box-shadow:inset 0 0 0 1px '+t.border+'"></i>'+
+        '<i style="background:'+t.danger+'"></i>'+
+      '</span>'+
+      '<span class="sw-name">'+t.name+'</span>'+
+    '</button>';
+  }).join("");
+  themesEl.addEventListener("click", function(e){
+    var b = e.target.closest(".swatch");
+    if (b) setTheme(parseInt(b.dataset.i, 10));
+  });
+
+  // ── control elements ──
+  var softRange = document.getElementById("softRange");
+  var softVal   = document.getElementById("softVal");
+  var radiusRange = document.getElementById("radiusRange");
+  var radiusVal   = document.getElementById("radiusVal");
+  var out = document.getElementById("out");
+
+  // colour pickers
+  document.querySelectorAll("input[type=color][data-k]").forEach(function(el){
+    el.addEventListener("input", function(){
+      var k = el.dataset.k;
+      S[k] = norm(el.value);
+      if (k === "accent") { S.accentDeep = darken(S.accent, 0.16); }
+      markActive(-1);
+      apply();
+    });
+  });
+  // hex fields
+  document.querySelectorAll(".hex[data-k]").forEach(function(el){
+    el.addEventListener("input", function(){
+      if (!isHex(el.value)) return;
+      var k = el.dataset.k;
+      S[k] = norm(el.value);
+      if (k === "accent") { S.accentDeep = darken(S.accent, 0.16); }
+      markActive(-1);
+      apply();
+    });
+    el.addEventListener("blur", function(){ el.value = S[el.dataset.k]; });
+  });
+
+  softRange.addEventListener("input", function(){ S.softAlpha = parseFloat(softRange.value); markActive(-1); apply(); });
+  radiusRange.addEventListener("input", function(){ S.radius = parseInt(radiusRange.value, 10); markActive(-1); apply(); });
+
+  document.getElementById("resetBtn").addEventListener("click", function(){ setTheme(0); });
+  document.getElementById("randomBtn").addEventListener("click", function(){
+    var h = Math.floor(Math.random() * 360);
+    S.accent = hslToHex(h, 62 + Math.random()*22, 44 + Math.random()*8);
+    S.accentDeep = darken(S.accent, 0.16);
+    markActive(-1);
+    apply();
+  });
+
+  // copy + download
+  var copyBtn = document.getElementById("copyBtn");
+  var copyLabel = document.getElementById("copyLabel");
+  copyBtn.addEventListener("click", function(){
+    navigator.clipboard.writeText(out.textContent).then(function(){
+      copyLabel.textContent = "Copied!";
+      setTimeout(function(){ copyLabel.textContent = "Copy"; }, 1600);
+    }).catch(function(){ copyLabel.textContent = "⌘C"; });
+  });
+  document.getElementById("downloadBtn").addEventListener("click", function(){
+    var blob = new Blob([out.textContent], { type: "text/css" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url; a.download = "feather-kit-theme.css";
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+  });
+
+  // ── preview interactivity (slider readout, dialog, deploy→toast) ──
+  var range = document.getElementById("pv-range");
+  var rangeVal = document.getElementById("pv-rangeval");
+  range.addEventListener("input", function(){ rangeVal.textContent = range.value; });
+
+  var dlg = document.getElementById("czdlg");
+  var openDlg = document.getElementById("pv-open-dialog");
+  if (dlg && openDlg && typeof dlg.showModal === "function") {
+    openDlg.addEventListener("click", function(){ dlg.showModal(); });
+    dlg.addEventListener("click", function(e){ if (e.target === dlg) dlg.close(); });
+  }
+
+  var deploy = document.getElementById("pv-deploy");
+  var toast = document.getElementById("pv-toast");
+  var toastTimer;
+  deploy.addEventListener("click", function(){
+    toast.hidden = false;
+    toast.style.animation = "none"; void toast.offsetWidth; toast.style.animation = "";
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ toast.hidden = true; }, 2800);
+  });
+
+  // boot with the default theme
+  setTheme(0);
+})();
+</script>
+
+</body></html>

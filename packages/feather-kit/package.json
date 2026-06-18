@@ -1,0 +1,59 @@
+{
+  "name": "feather-ui-kit",
+  "version": "0.1.0",
+  "description": "An ultra-lightweight React UI component library built on browser primitives. Several components ship zero JavaScript. Import only what you use.",
+  "type": "module",
+  "license": "MIT",
+  "author": "babanomania",
+  "homepage": "https://github.com/babanomania/feather-kit",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/babanomania/feather-kit.git",
+    "directory": "packages/feather-kit"
+  },
+  "keywords": ["react", "ui", "components", "css", "lightweight", "zero-dependency", "design-system"],
+  "sideEffects": ["*.css"],
+  "exports": {
+    ".":            { "import": "./dist/index.esm.js",      "require": "./dist/index.js" },
+    "./typography": { "import": "./dist/typography.esm.js",  "require": "./dist/typography.js" },
+    "./button":     { "import": "./dist/button.esm.js",      "require": "./dist/button.js" },
+    "./input":      { "import": "./dist/input.esm.js",       "require": "./dist/input.js" },
+    "./select":     { "import": "./dist/select.esm.js",      "require": "./dist/select.js" },
+    "./checkbox":   { "import": "./dist/checkbox.esm.js",    "require": "./dist/checkbox.js" },
+    "./radio":      { "import": "./dist/radio.esm.js",       "require": "./dist/radio.js" },
+    "./switch":     { "import": "./dist/switch.esm.js",      "require": "./dist/switch.js" },
+    "./slider":     { "import": "./dist/slider.esm.js",      "require": "./dist/slider.js" },
+    "./badge":      { "import": "./dist/badge.esm.js",       "require": "./dist/badge.js" },
+    "./avatar":     { "import": "./dist/avatar.esm.js",      "require": "./dist/avatar.js" },
+    "./progress":   { "import": "./dist/progress.esm.js",    "require": "./dist/progress.js" },
+    "./card":       { "import": "./dist/card.esm.js",        "require": "./dist/card.js" },
+    "./table":      { "import": "./dist/table.esm.js",       "require": "./dist/table.js" },
+    "./tabs":       { "import": "./dist/tabs.esm.js",        "require": "./dist/tabs.js" },
+    "./accordion":  { "import": "./dist/accordion.esm.js",   "require": "./dist/accordion.js" },
+    "./tooltip":    { "import": "./dist/tooltip.esm.js",     "require": "./dist/tooltip.js" },
+    "./menu":       { "import": "./dist/menu.esm.js",        "require": "./dist/menu.js" },
+    "./dialog":     { "import": "./dist/dialog.esm.js",      "require": "./dist/dialog.js" },
+    "./toast":      { "import": "./dist/toast.esm.js",       "require": "./dist/toast.js" },
+    "./styles.css": "./feather-kit.css",
+    "./themes/*":   "./themes/*"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.esm.js",
+  "files": [
+    "dist",
+    "themes",
+    "feather-kit.css",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "node build.js",
+    "prepublishOnly": "node build.js"
+  },
+  "peerDependencies": {
+    "react": ">=18"
+  },
+  "devDependencies": {
+    "esbuild": "^0.23.0",
+    "react": "^19.0.0"
+  }
+}

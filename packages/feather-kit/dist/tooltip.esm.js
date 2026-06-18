@@ -1,0 +1,1 @@
+import{jsx as p}from"react/jsx-runtime";function l({tip:t,className:o,children:a,...n}){let e=["feather-tooltip",o].filter(Boolean).join(" ");return p("span",{className:e,"data-tip":t,tabIndex:0,...n,children:a})}export{l as default};

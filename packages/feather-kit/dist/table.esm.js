@@ -1,0 +1,1 @@
+import{jsx as e}from"react/jsx-runtime";function b({className:a,children:l,...t}){let o=["feather-table",a].filter(Boolean).join(" ");return e("div",{className:"feather-table-wrap",children:e("table",{className:o,...t,children:l})})}export{b as default};

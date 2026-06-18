@@ -1,0 +1,1 @@
+import{jsx as e,jsxs as s}from"react/jsx-runtime";function t({label:a,className:c,...l}){let o=["feather-check feather-radio",c].filter(Boolean).join(" ");return s("label",{className:o,children:[e("input",{type:"radio",...l}),e("span",{className:"feather-check-box",children:e("span",{className:"feather-check-dot"})}),a]})}export{t as default};

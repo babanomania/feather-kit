@@ -1,0 +1,1 @@
+import{jsx as e}from"react/jsx-runtime";var n=(...a)=>a.filter(Boolean).join(" ");function f({initials:a,src:t,alt:r,className:o,...s}){return e("span",{className:n("feather-avatar",o),...s,children:t?e("img",{src:t,alt:r||""}):a})}function i({className:a,children:t,...r}){return e("div",{className:n("feather-avatars",a),...r,children:t})}export{i as AvatarGroup,f as default};

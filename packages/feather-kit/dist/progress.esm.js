@@ -1,0 +1,1 @@
+import{jsx as e}from"react/jsx-runtime";function t({value:r=0,className:o,...i}){let s=["feather-progress",o].filter(Boolean).join(" "),a=Math.max(0,Math.min(100,r));return e("div",{className:s,role:"progressbar","aria-valuenow":a,"aria-valuemin":0,"aria-valuemax":100,...i,children:e("i",{style:{width:a+"%"}})})}export{t as default};

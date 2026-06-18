@@ -1,0 +1,1 @@
+import{jsx as u}from"react/jsx-runtime";function r({variant:t="primary",size:o,className:e,...n}){let a=["feather-button",`feather-button-${t}`,o==="sm"&&"feather-button-sm",e].filter(Boolean).join(" ");return u("button",{className:a,...n})}export{r as default};

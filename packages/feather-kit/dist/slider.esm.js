@@ -1,0 +1,1 @@
+import{jsx as l,jsxs as i}from"react/jsx-runtime";function f({label:a,showValue:n,className:t,...e}){let u=["feather-slider",t].filter(Boolean).join(" "),s=e.value!=null?e.value:e.defaultValue;return i("label",{className:u,children:[a!=null&&l("span",{children:a}),l("input",{type:"range",...e}),n&&l("span",{className:"feather-slider-value",children:s})]})}export{f as default};

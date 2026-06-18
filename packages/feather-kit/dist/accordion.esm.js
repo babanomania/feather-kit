@@ -1,0 +1,1 @@
+import{jsx as o,jsxs as s}from"react/jsx-runtime";function r({summary:a,open:e,className:c,children:d,...i}){let n=["feather-accordion",c].filter(Boolean).join(" ");return s("details",{className:n,open:e,...i,children:[o("summary",{children:a}),o("div",{className:"feather-accordion-body",children:d})]})}export{r as default};
