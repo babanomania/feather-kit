@@ -377,8 +377,8 @@ pre.out-code { font-family: var(--mono); font-size: 12px; line-height: 1.65; col
 .docs-h2 { font-family: var(--mono); font-size: 15px; font-weight: 700; letter-spacing: -0.01em; margin: 30px 0 4px; }
 .docs-sub { font-family: var(--sans); font-size: 13px; color: var(--muted); margin: 0 0 14px; }
 .doc-pg { border: 1px solid var(--line-2); border-radius: 14px; overflow: hidden; background: #fff; }
-.doc-pg-preview { padding: 44px 26px; display: flex; align-items: center; justify-content: center; min-height: 120px; background: radial-gradient(130% 120% at 50% 0%, #fff, #FCFBF8); border-bottom: 1px solid var(--line); }
-.doc-pg-controls { display: flex; flex-wrap: wrap; gap: 14px 22px; align-items: center; padding: 16px 20px; border-bottom: 1px solid var(--line); background: #FCFBF8; }
+.doc-pg-preview { padding: 44px 26px; display: flex; align-items: center; justify-content: center; min-height: 120px; background: var(--fk-bg-subtle); border-bottom: 1px solid var(--fk-border); }
+.doc-pg-controls { display: flex; flex-wrap: wrap; gap: 14px 22px; align-items: center; padding: 16px 20px; border-bottom: 1px solid var(--fk-border); background: var(--fk-bg); }
 .doc-pg-controls .feather-field { width: auto; min-width: 150px; gap: 4px; }
 .doc-pg-controls .feather-slider { width: 230px; }
 .doc-code { position: relative; }
@@ -386,6 +386,9 @@ pre.out-code { font-family: var(--mono); font-size: 12px; line-height: 1.65; col
 .doc-code-copy { position: absolute; top: 10px; right: 10px; font-family: var(--mono); font-size: 11px; color: var(--muted); background: rgba(255,255,255,0.06); border: 1px solid var(--graphite-line); border-radius: 6px; padding: 4px 9px; cursor: pointer; transition: color 120ms; }
 .doc-code-copy:hover { color: #fff; }
 .docs-props .feather-table { font-size: 12.5px; }
+.docs-props .feather-table th { color: var(--muted); border-color: var(--line); }
+.docs-props .feather-table td { color: var(--ink-soft); border-color: var(--line); }
+.docs-props .feather-table tbody tr:hover { background: var(--paper-2); }
 .docs-props .feather-table th, .docs-props .feather-table td { white-space: normal; vertical-align: top; }
 .doc-prop { font-family: var(--mono); font-size: 12px; color: var(--accent-deep); font-weight: 600; }
 .doc-type { font-family: var(--mono); font-size: 11.5px; color: var(--ink-soft); }
@@ -458,3 +461,11 @@ pre.out-code { font-family: var(--mono); font-size: 12px; line-height: 1.65; col
 .bk-alert.warn .bk-alert-dot { background: #D97706; }
 .bk-alert.danger { background: color-mix(in srgb, var(--fk-danger), transparent 90%); border-color: color-mix(in srgb, var(--fk-danger), transparent 64%); }
 .bk-alert.danger .bk-alert-dot { background: var(--fk-danger); }
+
+/* templates: show / copy code */
+.tpl-code-actions { display: flex; gap: 7px; }
+.tpl-code-actions button { font-family: var(--mono); font-size: 12px; font-weight: 500; padding: 7px 13px; border-radius: 8px; border: 1px solid var(--line-2); background: #fff; color: var(--ink-soft); cursor: pointer; transition: background 120ms, color 120ms; }
+.tpl-code-actions button:hover { background: var(--paper-2); color: var(--ink); }
+.tpl-code-actions button.primary { background: var(--ink); color: #fff; border-color: var(--ink); }
+.tpl-code-actions button.primary:hover { background: #000; }
+.tpl-code { font-family: var(--mono); font-size: 12.5px; line-height: 1.65; color: #D9D5CC; background: var(--graphite); border: 1px solid var(--graphite-line); border-radius: 14px; padding: 20px 22px; overflow-x: auto; white-space: pre; margin: 16px 0 0; }

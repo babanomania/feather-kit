@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Select, Checkbox, Input, Slider, Table, Badge } from "feather-ui-kit";
 import { Nav, Footer } from "../chrome.jsx";
+import { ThemePicker, useThemeControl } from "../theme-control.jsx";
 import { DOCS, FLAT } from "../docs-data.jsx";
 
 function Control({ ctrl, value, onChange }) {
@@ -73,9 +74,10 @@ function PropsTable({ rows }) {
 
 export default function Docs({ slug }) {
   const comp = FLAT.find((c) => c.slug === slug) || FLAT[0];
+  const [theme, setTheme] = useThemeControl();
   return (
     <>
-      <Nav active="components" />
+      <Nav active="components" extra={<ThemePicker value={theme} onChange={setTheme} />} />
       <main className="docs">
         <div className="wrap wide-wrap docs-layout">
           <aside className="docs-side">

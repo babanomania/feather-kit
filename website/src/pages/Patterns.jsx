@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Nav, Footer } from "../chrome.jsx";
+import { ThemePicker, useThemeControl } from "../theme-control.jsx";
 import { CATEGORIES } from "../patterns-data.jsx";
 
 function Block({ block }) {
@@ -24,9 +25,10 @@ function Block({ block }) {
 export default function Patterns({ cat }) {
   const category = CATEGORIES.find((c) => c.slug === cat) || CATEGORIES[0];
   const total = CATEGORIES.reduce((n, c) => n + c.blocks.length, 0);
+  const [theme, setTheme] = useThemeControl();
   return (
     <>
-      <Nav active="patterns" />
+      <Nav active="patterns" extra={<ThemePicker value={theme} onChange={setTheme} />} />
       <main className="patterns">
         <div className="wrap wide-wrap">
           <div className="cz-head" style={{ marginBottom: 18 }}>

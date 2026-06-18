@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   Button, Input, Select, Switch, Slider, Badge, Avatar, AvatarGroup, Progress,
   Card, Table, Tabs, Accordion, Menu, Dialog, DialogBody, DialogFoot, useToast,
 } from "feather-ui-kit";
 import { Nav, Footer } from "../chrome.jsx";
-import { THEMES, themeVars } from "../theme-presets.js";
+import { ThemePicker, useThemeControl } from "../theme-control.jsx";
 
 const grad = (a, b) => ({ background: `linear-gradient(135deg, ${a}, ${b})` });
 const APP = { dashboard: 1, projects: 1, settings: 1 };
@@ -17,30 +17,165 @@ const Dots = () => <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" 
 const Up = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="6 15 12 9 18 15" /></svg>;
 const Down = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="6 9 12 15 18 9" /></svg>;
 
-function ThemePicker({ value, onChange }) {
-  const t = THEMES[value];
-  return (
-    <>
-      <button className="tp-btn" popoverTarget="tplThemeMenu" aria-label="Choose theme">
-        <span className="tp-dots"><i style={{ background: t.accent }} /><i style={{ background: t.ink }} /><i style={{ background: t.bgSubtle, boxShadow: `inset 0 0 0 1px ${t.border}` }} /></span>
-        <span className="tp-name">{t.name}</span>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
-      </button>
-      <div className="tp-menu" popover="auto" id="tplThemeMenu">
-        <div className="tp-grid">
-          {THEMES.map((th, i) => (
-            <button key={th.name} className={"tp-item" + (i === value ? " active" : "")}
-              onClick={(e) => { onChange(i); e.currentTarget.closest("[popover]")?.hidePopover?.(); }}>
-              <span className="d"><i style={{ background: th.accent }} /><i style={{ background: th.ink }} /><i style={{ background: th.bgSubtle, boxShadow: `inset 0 0 0 1px ${th.border}` }} /></span>
-              <span>{th.name}</span>
-            </button>
-          ))}
+const TEMPLATE_CODE = {
+  dashboard: `<div className="tpl-head">
+  <div><h2>Overview</h2><p>Welcome back, Jordan.</p></div>
+  <div className="tpl-actions">
+    <Select><option>Last 30 days</option></Select>
+    <Button variant="outline" size="sm">Export</Button>
+  </div>
+</div>
+
+{/* KPI cards */}
+<div className="stat-row">
+  <Card className="stat">
+    <div className="s-top">
+      <span className="s-label">Revenue</span>
+      <span className="delta up"><Up />12.4%</span>
+    </div>
+    <div className="s-num">$48,210</div>
+    <Spark bars={[40, 55, 35, 70, 60, 90, 100]} />
+  </Card>
+  {/* …Active users, Conversion, Churn */}
+</div>
+
+{/* chart + goals */}
+<div className="dash-grid">
+  <Card>{/* <div className="chart">…bars…</div> */}</Card>
+  <Card>{/* goal rows with <Progress value={80} /> */}</Card>
+</div>
+
+{/* recent orders */}
+<Card>
+  <Table>
+    <thead><tr><th>Customer</th><th>Status</th><th className="feather-num">Amount</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>
+          <div className="cell-u">
+            <Avatar initials="MK" />
+            <div className="nm"><b>Mara Kessler</b><span>mara@northwind.io</span></div>
+          </div>
+        </td>
+        <td><Badge variant="soft" dot>Paid</Badge></td>
+        <td className="feather-num">$290</td>
+      </tr>
+    </tbody>
+  </Table>
+</Card>`,
+  projects: `<div className="tpl-head">
+  <div><h2>Projects</h2><p>14 active projects across 3 teams.</p></div>
+  <Button variant="primary" size="sm"><Plus /> New project</Button>
+</div>
+
+<Card>
+  <Table>
+    <thead><tr><th>Project</th><th>Team</th><th>Status</th><th>Progress</th><th /></tr></thead>
+    <tbody>
+      <tr>
+        <td>
+          <div className="cell-u">
+            <Avatar initials="DR" />
+            <div className="nm"><b>Design refresh</b><span>acme-web</span></div>
+          </div>
+        </td>
+        <td><AvatarGroup><Avatar initials="JS" /><Avatar initials="MK" /></AvatarGroup></td>
+        <td><Badge variant="soft" dot>On track</Badge></td>
+        <td>
+          <div className="mini-prog"><Progress value={72} /><span>72%</span></div>
+        </td>
+        <td>
+          <Menu trigger={<Dots />}>
+            <button>Open</button><button>Archive</button>
+          </Menu>
+        </td>
+      </tr>
+    </tbody>
+  </Table>
+  <div className="feather-card-foot" style={{ justifyContent: "space-between" }}>
+    <span>Showing 4 of 14</span>
+    <div style={{ display: "flex", gap: 8 }}>
+      <Button variant="outline" size="sm">Previous</Button>
+      <Button variant="outline" size="sm">Next</Button>
+    </div>
+  </div>
+</Card>`,
+  settings: `<div className="tpl-head"><div><h2>Settings</h2></div></div>
+
+<Tabs items={[
+  { label: "Profile", content: <ProfileForm /> },
+  { label: "Notifications", content: <NotificationSwitches /> },
+  { label: "Account", content: <PasswordForm /> },
+]} />
+
+{/* ProfileForm */}
+<Card>
+  <div className="feather-card-head"><div><h3 className="feather-card-title">Public profile</h3></div></div>
+  <CardBody>
+    <div className="avatar-row">
+      <Avatar className="avatar-lg" initials="JS" />
+      <Button variant="outline" size="sm">Upload</Button>
+    </div>
+    <div className="row2"><Input label="First name" /><Input label="Last name" /></div>
+    <Input label="Email" defaultValue="jordan@acme.com" />
+  </CardBody>
+</Card>
+
+{/* sticky save bar */}
+<div className="save-bar">
+  <span>Unsaved changes</span>
+  <div style={{ display: "flex", gap: 9 }}>
+    <Button variant="ghost">Discard</Button>
+    <Button variant="primary">Save changes</Button>
+  </div>
+</div>`,
+  pricing: `const [yearly, setYearly] = useState(false);
+
+<div className="pricing">
+  <div className="pricing-head">
+    <h2>Simple, transparent pricing</h2>
+    <label className="bill-toggle">
+      <span>Monthly</span>
+      <Switch checked={yearly} onChange={(e) => setYearly(e.target.checked)} />
+      <span>Yearly</span>
+    </label>
+  </div>
+  <div className="tiers">
+    <Card className="tier popular">
+      <div className="t-name">Pro <Badge variant="soft">Popular</Badge></div>
+      <div className="price">{yearly ? "$23" : "$29"}<small>/mo</small></div>
+      <ul className="feat-list">
+        <li><Check /> Unlimited projects</li>
+        <li><Check /> Priority support</li>
+      </ul>
+      <Button variant="primary" className="feather-button-block">Start trial</Button>
+    </Card>
+    {/* …Starter and Enterprise */}
+  </div>
+</div>`,
+  signin: `<div className="auth">
+  <div className="auth-aside">
+    {/* gradient brand panel + testimonial */}
+  </div>
+  <div className="auth-main">
+    <div className="auth-card">
+      <h3>Welcome back</h3>
+      <p className="sub">Sign in to your Acme account.</p>
+      <form className="auth-form" onSubmit={(e) => e.preventDefault()}>
+        <Input label="Email" type="email" defaultValue="jordan@acme.com" />
+        <Input label="Password" type="password" />
+        <div className="row-between">
+          <Checkbox label="Remember me" defaultChecked />
+          <span className="link">Forgot password?</span>
         </div>
-        <div className="tp-foot"><a href="#/customizer">Open full customizer <span>→</span></a></div>
-      </div>
-    </>
-  );
-}
+        <Button variant="primary" className="feather-button-block">Sign in</Button>
+        <div className="divider">or continue with</div>
+        <Button variant="outline" className="feather-button-block">GitHub</Button>
+      </form>
+    </div>
+  </div>
+</div>`,
+};
 
 function Sidebar({ tpl, go }) {
   const item = (key, label, icon) => (
@@ -340,15 +475,11 @@ function AppScreen({ tpl }) {
 }
 
 export default function Templates() {
-  const [theme, setTheme] = useState(0);
+  const [theme, setTheme] = useThemeControl();
   const [tpl, setTpl] = useState("dashboard");
-
-  useEffect(() => {
-    const root = document.documentElement;
-    const vars = themeVars(THEMES[theme]);
-    Object.entries(vars).forEach(([k, v]) => root.style.setProperty(k, v));
-    return () => Object.keys(vars).forEach((k) => root.style.removeProperty(k));
-  }, [theme]);
+  const [showCode, setShowCode] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const copyCode = () => navigator.clipboard.writeText(TEMPLATE_CODE[tpl]).then(() => { setCopied(true); setTimeout(() => setCopied(false), 1500); }).catch(() => {});
 
   const tabs = [["dashboard", "Dashboard"], ["projects", "Projects"], ["settings", "Settings"], ["pricing", "Pricing"], ["signin", "Sign in"]];
   return (
@@ -357,15 +488,19 @@ export default function Templates() {
       <main className="tpl-page">
         <div className="wrap wide-wrap">
           <div className="cz-head" style={{ marginBottom: 0 }}>
-            <p className="eyebrow"><b>·</b> Templates &amp; blocks</p>
+            <p className="eyebrow"><b>·</b> Templates</p>
             <h1 className="hero-h" style={{ fontSize: "clamp(30px,5vw,46px)" }}>Components, assembled into <span className="n">real pages</span>.</h1>
-            <p className="lede" style={{ fontSize: "clamp(16px,2vw,19px)", marginBottom: 0 }}>Five production-shaped screens, built entirely from feather-kit. Pick a screen, then switch the theme (top-right) to restyle every component at once.</p>
+            <p className="lede" style={{ fontSize: "clamp(16px,2vw,19px)", marginBottom: 0 }}>Five production-shaped screens, built entirely from feather-ui-kit. Pick a screen, switch the theme (top-right), and copy the code.</p>
           </div>
           <div className="switcher">
             <div className="seg">{tabs.map(([k, label]) => <button key={k} className={tpl === k ? "active" : ""} onClick={() => setTpl(k)}>{label}</button>)}</div>
-            <span className="switch-note">Theme: <b>{THEMES[theme].name}</b> — change it top-right ↗</span>
+            <div className="tpl-code-actions">
+              <button onClick={() => setShowCode((s) => !s)}>{showCode ? "Hide code" : "Show code"}</button>
+              <button className="primary" onClick={copyCode}>{copied ? "Copied!" : "Copy code"}</button>
+            </div>
           </div>
           <Window tpl={tpl} go={setTpl} />
+          {showCode && <pre className="tpl-code">{TEMPLATE_CODE[tpl]}</pre>}
         </div>
       </main>
       <Footer />
