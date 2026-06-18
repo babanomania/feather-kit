@@ -172,7 +172,9 @@ footer.site { border-top: 1px solid var(--line); padding: 50px 0 60px; }
 
 /* ───────── customizer ───────── */
 .cz { padding: 38px 0 80px; }
-.cz-head { margin-bottom: 24px; max-width: 70ch; }
+.cz-head { margin-bottom: 24px; }
+.cz-head .hero-h { max-width: none; }
+.cz-head .lede { max-width: 70ch; }
 .cz-layout { display: grid; grid-template-columns: 360px 1fr; gap: 28px; align-items: start; }
 @media (max-width: 940px) { .cz-layout { grid-template-columns: 1fr; } }
 .panel { position: sticky; top: 78px; max-height: calc(100vh - 96px); overflow: auto; border: 1px solid var(--line-2); border-radius: 16px; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
