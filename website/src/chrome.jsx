@@ -18,7 +18,7 @@ export function Nav({ active, extra }) {
           <FeatherMark /> <b>Feather</b><span>Kit</span>
         </a>
         <div className="nav-links">
-          <a href="#/" className={active === "home" ? "active" : ""}>Components</a>
+          <a href="#/components" className={active === "components" ? "active" : ""}>Components</a>
           <a href="#/templates" className={active === "templates" ? "active" : ""}>Templates</a>
           <a href="#/customizer" className={active === "customizer" ? "active" : ""}>Customize</a>
           {extra}
