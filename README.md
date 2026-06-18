@@ -12,7 +12,7 @@
 
 <p align="center">
   <a href="https://www.npmjs.com/package/feather-ui-kit"><img src="https://img.shields.io/npm/v/feather-ui-kit?color=109488&label=npm" alt="npm version"></a>
-  <a href="https://bundlephobia.com/package/feather-ui-kit"><img src="https://img.shields.io/bundlephobia/minzip/feather-ui-kit?color=109488&label=min%2Bgzip" alt="bundle size"></a>
+  <a href="https://bundlephobia.com/package/feather-ui-kit"><img src="https://img.shields.io/badge/min%2Bgzip-~200%20B%2Fcomponent-109488" alt="bundle size"></a>
   <a href="https://www.npmjs.com/package/feather-ui-kit?activeTab=dependencies"><img src="https://img.shields.io/badge/dependencies-0-109488" alt="zero dependencies"></a>
   <img src="https://img.shields.io/badge/React-18%2B-109488" alt="React 18+">
   <a href="https://www.npmjs.com/package/feather-ui-kit"><img src="https://img.shields.io/npm/l/feather-ui-kit?color=109488" alt="MIT license"></a>
