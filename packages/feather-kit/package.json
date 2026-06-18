@@ -1,11 +1,11 @@
 {
   "name": "feather-ui-kit",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "An ultra-lightweight React UI component library built on browser primitives. Several components ship zero JavaScript. Import only what you use.",
   "type": "module",
   "license": "MIT",
   "author": "babanomania",
-  "homepage": "https://github.com/babanomania/feather-kit",
+  "homepage": "https://babanomania.github.io/feather-kit/",
   "repository": {
     "type": "git",
     "url": "https://github.com/babanomania/feather-kit.git",
