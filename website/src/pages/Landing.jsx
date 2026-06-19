@@ -43,6 +43,10 @@ function HeroCard() {
 export default function Landing() {
   const [vol, setVol] = useState(68);
   const [dlg, setDlg] = useState(false);
+  const [npmCopied, setNpmCopied] = useState(false);
+  const copyInstall = () => navigator.clipboard.writeText("npm i feather-ui-kit")
+    .then(() => { setNpmCopied(true); setTimeout(() => setNpmCopied(false), 1600); })
+    .catch(() => {});
 
   return (
     <>
@@ -56,7 +60,7 @@ export default function Landing() {
           <p className="lede">Buttons, inputs, cards, tables — the everyday set, all clean CSS. Dialogs, menus, and tooltips — built on the primitives the browser already ships, so several need <em>no JavaScript at all</em>. Import only what you use; a handful of components is still about a kilobyte.</p>
           <div className="cta-row">
             <a className="btn btn-primary" href={REPO} target="_blank" rel="noreferrer">Star on GitHub</a>
-            <a className="npm" href="#/customizer"><span className="prompt">$</span><span>npm i feather-ui-kit</span><span className="copy">themes →</span></a>
+            <button className="npm" type="button" onClick={copyInstall} aria-label="Copy install command"><span className="prompt">$</span><span>npm i feather-ui-kit</span><span className="copy">{npmCopied ? "copied!" : "copy"}</span></button>
           </div>
           <div className="hero-stage"><HeroCard /></div>
         </div>
